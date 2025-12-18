@@ -1,0 +1,31 @@
+{
+    "dataSource": "Altea",
+    "addressModels": [
+        {
+            "addrTypeRefId": "1368",
+            "street1": "78626 Dooley Brook",
+            "street2": "",
+            "city": "Elliottown",
+            "state": "192",
+            "zip": "799981106",
+            "zip4": ""
+        }
+    ],
+    "communicationModels": [
+        {
+            "commTypeRefId": "1364",
+            "commValue": "8886323862"
+        }
+    ],
+    "relToInsuredPersonId": "",
+    "relToInsuredRefId": 95,
+    "personId": "",
+    "effectiveDate": "2025-06-30T17:00:00.000Z",
+    "insuranceTypeRefId": "94",
+    "insuranceName": "AE015-AETNA MEDICARE",
+    "groupNumber": "PT01",
+    "policyNumber": "35346364352",
+    "payerTypeRefId": "1903",
+    "payerName": "60054",
+    "policyHolderDob": null
+}
