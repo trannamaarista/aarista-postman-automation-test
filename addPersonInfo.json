@@ -1,0 +1,37 @@
+{
+    "patient": {
+        "personIdCardModels": [],
+        "addressModels": [
+            {
+                "addrTypeRefId": "6",
+                "street1": "409 Samara Land",
+                "street2": "Mayra Burg",
+                "city": "South Franciscatown",
+                "state": "78",
+                "zip": "496",
+                "zip4": ""
+            }
+        ],
+        "communicationModels": [
+            {
+                "commTypeRefId": "14",
+                "commValue": "222-598-1761"
+            }
+        ],
+        "ssn": null,
+        "firstName": "Ashton",
+        "billingFirstName": "Alexandre",
+        "lastName": "Bergnaum",
+        "billingLastName": "Ratke",
+        "middleName": "Emiliano",
+        "billingMiddleName": "Collin",
+        "dob": "1990-12-14T17:00:00.000Z",
+        "billingDob": "1990-12-14T17:00:00.000Z",
+        "adminGenderRefId": "10",
+        "genderAtBirthRefId": "10",
+        "idCardTypeRefId": "",
+        "idNumber": "",
+        "preferredCommRefId": "14"
+    },
+    "byPassDeduplication": false
+}
