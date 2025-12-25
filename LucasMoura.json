@@ -4,7 +4,7 @@
         "addressModels": [
             {
                 "addrTypeRefId": "6",
-                "street1": "123 Moore Pass",
+                "street1": "444 Moore Pass",
                 "street2": "Skiles Orchard",
                 "city": "Aliteco Marid",
                 "state": "736",
@@ -18,10 +18,10 @@
                 "commValue": "876-358-0447"
             }
         ],
-        "ssn": "722227777",
-        "firstName": "David",
+        "ssn": "5555777",
+        "firstName": "Thomas",
         "billingFirstName": "Earn",
-        "lastName": "Koke",
+        "lastName": "Partey",
         "billingLastName": "Kutcher",
         "middleName": "Toni",
         "billingMiddleName": "Ozil",
