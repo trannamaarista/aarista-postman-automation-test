@@ -1,0 +1,37 @@
+{
+    "patient": {
+        "personIdCardModels": [],
+        "addressModels": [
+            {
+                "addrTypeRefId": "6",
+                "street1": "453 Una Turnpike",
+                "street2": "Roberta Road",
+                "city": "Lucianohaven",
+                "state": "514",
+                "zip": "298",
+                "zip4": ""
+            }
+        ],
+        "communicationModels": [
+            {
+                "commTypeRefId": "14",
+                "commValue": "082-359-1111"
+            }
+        ],
+        "ssn": "121710101",
+        "firstName": "Neymar",
+        "billingFirstName": "Neymar",
+        "lastName": "Junior",
+        "billingLastName": "Junior",
+        "middleName": "da Silva",
+        "billingMiddleName": "da Silva",
+        "dob": "1992-12-14T17:00:00.000Z",
+        "billingDob": "1992-12-14T17:00:00.000Z",
+        "adminGenderRefId": "10",
+        "genderAtBirthRefId": "10",
+        "idCardTypeRefId": "",
+        "idNumber": "",
+        "preferredCommRefId": "14"
+    },
+    "byPassDeduplication": false
+}

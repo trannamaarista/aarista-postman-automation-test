@@ -1,0 +1,2257 @@
+{
+  "info": {
+    "_postman_id": "95925c10-5c7c-4d93-9dfe-ffbea8a925dc",
+    "name": "Aarista",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "e1a05227-f61f-4237-ad41-e3a36dc49dee",
+            "exec": [
+              "// Check if the response status is successful (2xx)",
+              "const isSuccessful = pm.response.code >= 200 && pm.response.code < 300;",
+              "",
+              "console.log(\"Response Status Code:\", pm.response.code);",
+              "console.log(\"Response Status:\", pm.response.status);",
+              "",
+              "// Test for response status",
+              "pm.test(\"Response status check\", function () {",
+              "    if (isSuccessful) {",
+              "        pm.expect(pm.response.code).to.be.within(200, 299);",
+              "        console.log(\"✓ Request was successful\");",
+              "    } else {",
+              "        console.log(\"✗ Request failed with status:\", pm.response.code);",
+              "        console.log(\"Response body:\", pm.response.text());",
+              "    }",
+              "});",
+              "",
+              "// Only attempt to parse JSON and extract token if response is successful",
+              "if (isSuccessful) {",
+              "    let jsonData;",
+              "    ",
+              "    try {",
+              "        jsonData = pm.response.json();",
+              "        console.log(\"✓ Response is valid JSON\");",
+              "        ",
+              "        // Extract and save the accessToken to environment variable",
+              "        if (jsonData.accessToken) {",
+              "            pm.environment.set(\"accessTokenValue\", jsonData.accessToken);",
+              "            console.log(\"✓ Access token saved to environment variable 'accessTokenValue'\");",
+              "        } else {",
+              "            console.log(\"⚠ No accessToken found in response\");",
+              "        }",
+              "        ",
+              "        // Test to verify the token was received",
+              "        pm.test(\"Access token is present in response\", function () {",
+              "            pm.expect(jsonData).to.have.property(\"accessToken\");",
+              "            pm.expect(jsonData.accessToken).to.be.a(\"string\").and.not.be.empty;",
+              "        });",
+              "        ",
+              "    } catch (parseError) {",
+              "        console.log(\"✗ Failed to parse response as JSON:\", parseError.message);",
+              "        console.log(\"Raw response:\", pm.response.text());",
+              "        ",
+              "        pm.test(\"Response should be valid JSON\", function () {",
+              "            pm.expect.fail(\"Response is not valid JSON: \" + parseError.message);",
+              "        });",
+              "    }",
+              "} else {",
+              "    // Error scenario tests",
+              "    pm.test(\"Login request failed - check credentials or server status\", function () {",
+              "        pm.expect.fail(\"Request failed with status \" + pm.response.code + \": \" + pm.response.text());",
+              "    });",
+              "    ",
+              "    console.log(\"⚠ Skipping token extraction due to failed response\");",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "5382a12a-ec99-4045-a0cc-04a56a200e82",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"NVCHAU.NIIT@GMAIL.COM\",\r\n  \"password\": \"Altea2023!\",\r\n  \"sourceRefId\": 3838,\r\n  \"platformRefId\": 0\r\n}\r\n// {\r\n//   \"USERNAME\": \"DUYTHUAN86@GMAIL.COM\",\r\n//   \"PASSWORD\": \"Aarista2025!\",\r\n//   \"sourceRefId\": 3838,\r\n//   \"platformRefId\": 0\r\n// }\r\n// {\r\n//   \"USERNAME\": \"thuythanh@mailinator.com\",\r\n//   \"PASSWORD\": \"1\"\r\n// }\r\n// public const int Web = 3838;\r\n// public const int PatientMobileApp = 3839;\r\n// public const int ProviderMobileApp = 3840;\r\n\r\n// {\r\n//   \"USERNAME\": \"truongtest@mailinator.com\",\r\n//   \"PASSWORD\": \"Altea2023!\",\r\n//   \"sourceRefId\": 3838,\r\n//   \"platformRefId\": 0\r\n// }\r\n// {\r\n//   \"USERNAME\": \"bui.tinh@alteahc.com\",\r\n//   \"PASSWORD\": \"Aarista2024!\"\r\n// }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Account/login",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Account",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Care Type",
+      "id": "9fa0ce26-8ecd-4011-b378-3947bed394e5",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImM2OGY1N2RiLWFjNTEtNGZmZS1iOTQ2LWVmZTBhZmMzMTFkYSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMmRmMjEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCJkYTQ2YSIsImQxMTI1IiwiOTFhYjYiLCJmYzZiZSIsIjRkNmM5IiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCIwODQ4OSIsImRjYzAzIiwiMWQxNzkiLCIxZmJhMSIsIjEzNmFiIiwiYzhmYTYiLCJhOGMzNyIsImYyNTU2IiwiNzNlMWYiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsImYzYjYyIiwiYjE5ODQiLCIxOTAzMSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCIzOGM2OSIsImU4YjIxIiwiYzhhZDYiLCJlOWI3NSIsIjYwOGIzIiwiNTAyMTgiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiMzQzODciLCJkNGQ1YyIsIjkxNDZjIiwiZDAyYmYiLCI3ZmM1NSIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjg2MWQ2IiwiNWEyYmQiXSwiZXhwIjoxNzEyMzA0ODA4LCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.GNIOCHdJ7aFaSFpmipdvhqpIAZds_mBsuVOXUthZISg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Admissions/care-type/50a6bba7-54e0-4e9e-a0bf-0c0750e7c3b6?type=1569",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Admissions",
+            "care-type",
+            "50a6bba7-54e0-4e9e-a0bf-0c0750e7c3b6"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "1569"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Compliance Dashboard Year-overview",
+      "id": "557b3402-f3b5-4661-bc39-4a299f0c852d",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWljaGFlbC5tYWlAYWx0ZWFoYy5jb20iLCJ1c2VybmFtZSI6Ik1pY2hhZWwgTWFpIiwidWlkIjoiNDczOWJjZGUtYzQ0Yi00ZDg4LTgzZTMtNTAwMWQ0ZTM5Y2Y4IiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc2lkIjoiYzY1NTllM2EtZjc2NC00MGRmLThlYzctYmVkZDFlNWI2ZTVkIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjpbIlJldmVudWUgQ3ljbGUgTWFuYWdlbWVudCIsIkFsdGVhIEFkdmFuY2VkIEFkbWluaXN0cmF0b3IiLCJMQ1NXIiwicnZ1IGRhc2hib2FyZCIsIkNvbXBsaWFudCBEYXNoYm9hcmQiLCJBdWRpdCBsb2ciLCJQaHlzaWNpYW4iLCJTeXN0ZW0gSW50ZXJmYWNlIiwiQWx0ZWEgQWRtaW5pc3RyYXRvciJdLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCJkMTEyNSIsIjkxYWI2IiwiZmM2YmUiLCI0ZDZjOSIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiMDg0ODkiLCJkY2MwMyIsIjFkMTc5IiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCJmMjU1NiIsIjczZTFmIiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjI2Mjk4IiwiODI2YzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCIzNDM4NyIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MTY0MzgwNTEsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.JDElVnhUpk7DilQUxNECoJOgCePpUxv_ZSIr0Wcd3dg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"86eb8e64-a741-4a90-8471-e82dbc038698\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/year-overview/2024",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "year-overview",
+            "2024"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Compliance Dashboard total cpt billed",
+      "id": "9c7e0dcb-adf7-4b70-bf70-068b21f6d737",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"86eb8e64-a741-4a90-8471-e82dbc038698\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/total-cpt-billed",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "total-cpt-billed"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/encounters-summary",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "40bc98ac-1151-4d3e-8fa2-93ac4ed882b5",
+            "exec": [
+              "var requestConfig = {\r",
+              "    method: 'POST',\r",
+              "    url: 'https://localhost:7220/Account/login',\r",
+              "    header: 'Content-Type: application/json',\r",
+              "    body: {\r",
+              "        mode: 'raw',\r",
+              "        raw: JSON.stringify({\r",
+              "            \"username\": \"nvchau.niit@gmail.com\",\r",
+              "            \"password\": \"Altea2023!\"\r",
+              "        })\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.sendRequest(requestConfig, function (err, response) {\r",
+              "    if (err) {\r",
+              "        console.error(err);\r",
+              "    } else {\r",
+              "        if (response.code === 200) {\r",
+              "            var responseBody = response.json();\r",
+              "            var token = responseBody.accessToken;\r",
+              "            pm.collectionVariables.set('accessToken', token);\r",
+              "        } else {\r",
+              "            console.error('Failed to login. Response code:', response.code);\r",
+              "        }\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "id": "eaf9a7d2-427f-4d44-acc5-686a580674f9",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"35c9a039-1d8e-44f5-a2b5-4a97131b5086\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/encounters-summary",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "encounters-summary"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/References/master-carrier",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "92e71a88-1b47-4874-8f6c-e9fe8cc4eccd",
+            "exec": [
+              "var requestConfig = {\r",
+              "    method: 'POST',\r",
+              "    url: 'https://localhost:7220/Account/login',\r",
+              "    header: 'Content-Type: application/json',\r",
+              "    body: {\r",
+              "        mode: 'raw',\r",
+              "        raw: JSON.stringify({\r",
+              "            \"username\": \"nvchau.niit@gmail.com\",\r",
+              "            \"password\": \"Altea2023!\"\r",
+              "        })\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.sendRequest(requestConfig, function (err, response) {\r",
+              "    if (err) {\r",
+              "        console.error(err);\r",
+              "    } else {\r",
+              "        if (response.code === 200) {\r",
+              "            var responseBody = response.json();\r",
+              "            var token = responseBody.accessToken;\r",
+              "            pm.collectionVariables.set('accessToken', token);\r",
+              "        } else {\r",
+              "            console.error('Failed to login. Response code:', response.code);\r",
+              "        }\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "id": "39bdbb31-22df-4b8a-9798-cc1b8ad0547e",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"carrierId\": \"dcdsv\",\r\n    \"carrierName\": \"vdsvdsvdsvds\",\r\n    \"insuranceName\": \"dcdsv-vdsvdsvdsvds\",\r\n    \"payorId\": \"\",\r\n    \"phoneNumber\": \"+1(084)111-1111\",\r\n    \"address1\": \"vdsvdsvdsvsd\",\r\n    \"address2\": \"\",\r\n    \"city\": \"HCm\",\r\n    \"state\": \"AL\",\r\n    \"zip\": \"70000\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/References/master-carrier",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "References",
+            "master-carrier"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Organizations/organization",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "ab5905b5-9727-4e27-b010-c7798a1d18d7",
+            "exec": [
+              "var requestConfig = {\r",
+              "    method: 'POST',\r",
+              "    url: 'https://localhost:7220/Account/login',\r",
+              "    header: 'Content-Type: application/json',\r",
+              "    body: {\r",
+              "        mode: 'raw',\r",
+              "        raw: JSON.stringify({\r",
+              "            \"username\": \"nvchau.niit@gmail.com\",\r",
+              "            \"password\": \"Altea2023!\"\r",
+              "        })\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.sendRequest(requestConfig, function (err, response) {\r",
+              "    if (err) {\r",
+              "        console.error(err);\r",
+              "    } else {\r",
+              "        if (response.code === 200) {\r",
+              "            var responseBody = response.json();\r",
+              "            var token = responseBody.accessToken;\r",
+              "            pm.collectionVariables.set('accessToken', token);\r",
+              "        } else {\r",
+              "            console.error('Failed to login. Response code:', response.code);\r",
+              "        }\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "id": "a6b68060-8200-4c21-acf7-5b60147ecd07",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Nhiet Doi Hospital ABC 123\",\r\n    \"ein\": \"123456789\",\r\n    \"code\": \"\",\r\n    \"oid\": \"OID\",\r\n    \"npi\": \"1234567890\",\r\n    \"dea\": \"DE2532525\",\r\n    \"parentid\": null,\r\n    \"taxonomycodes\": [\r\n        \"1080\",\r\n        \"1081\"\r\n    ],\r\n    \"typeid\": 208,\r\n    \"contracts\": [\r\n        \"54cf9db7-1d88-44e7-9096-5e488e542898\",\r\n        \"b536600c-aa63-44c3-989f-9d09a3438758\",\r\n        \"2dfcce7e-4907-4bdb-a5e6-fc2c668a5f2a\",\r\n        \"716dab56-4d3e-4e03-9791-6ffff6ae97f4\"\r\n    ],\r\n    \"poscode\": null,\r\n    \"ccn\": \"CCN\",\r\n    \"timeregionrefid\": -6,\r\n    \"addressmodel\": {\r\n        \"addrTypeRefId\": 647,\r\n        \"street1\": \"Tan Hai\",\r\n        \"city\": \"HCm\",\r\n        \"zip\": \"70000\",\r\n        \"state\": \"149\"\r\n    },\r\n    \"communicationmodels\": [\r\n        {\r\n            \"commTypeRefId\": 648,\r\n            \"commValue\": \"(084) 111-1111\",\r\n            \"isPreferredComm\": false\r\n        }\r\n    ],\r\n    \"dataSource\": \"Altea\",\r\n    \"billingcorefid\": null,\r\n    \"datasourcevmid\": null,\r\n    \"dataSourceOrgUuid\": null,\r\n    \"dataSourceFacId\": null,\r\n    \"dataSourceEnabled\": true,\r\n    \"faxnotes\": true,\r\n    \"updoxaccountid\": \"\",\r\n    \"rcopiaexternalidtype\": \"Facility\",\r\n    \"features\": [\r\n        \"4bfbb262-0ea2-4ebb-e8b2-08da8ac35e58\",\r\n        \"3780ab12-eb4c-48ea-1a02-08db37a65ec5\",\r\n        \"25b55180-5bcf-4a7a-e589-08db773ab68c\",\r\n        \"1897376e-df48-4a54-092c-08dbc6ab4ab8\",\r\n        \"69288242-4542-4a75-991d-90f9eec7e2ab\",\r\n        \"ec76fa2a-1142-4576-9449-ce2c3e804dcf\"\r\n    ],\r\n    \"regionids\": [\r\n        \"7097e1eb-3fa3-48c5-9051-05782ec511dd\",\r\n        \"2a9e2e3b-2674-4935-bb0c-05e748988019\",\r\n        \"9adfffde-e5d6-48fd-a7cd-08c462e4dbca\"\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Organizations/organization",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Organizations",
+            "organization"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Person/patient-core",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "5e98ca7f-f1c6-4a92-8a22-8d4c122c9dbd",
+            "exec": [
+              "var requestConfig = {\r",
+              "    method: 'POST',\r",
+              "    url: 'https://localhost:7220/Account/login',\r",
+              "    header: 'Content-Type: application/json',\r",
+              "    body: {\r",
+              "        mode: 'raw',\r",
+              "        raw: JSON.stringify({\r",
+              "            \"username\": \"nvchau.niit@gmail.com\",\r",
+              "            \"password\": \"Altea2023!\"\r",
+              "        })\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.sendRequest(requestConfig, function (err, response) {\r",
+              "    if (err) {\r",
+              "        console.error(err);\r",
+              "    } else {\r",
+              "        if (response.code === 200) {\r",
+              "            var responseBody = response.json();\r",
+              "            var token = responseBody.accessToken;\r",
+              "            pm.collectionVariables.set('accessToken', token);\r",
+              "        } else {\r",
+              "            console.error('Failed to login. Response code:', response.code);\r",
+              "        }\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "id": "407fe645-791a-43d3-8ce5-56d61e531408",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"patient\": {\r\n        \"personIdCardModels\": [],\r\n        \"addressModels\": [\r\n            {\r\n                \"addrTypeRefId\": \"6\",\r\n                \"street1\": \"Tan Hai\",\r\n                \"street2\": \"\",\r\n                \"city\": \"HCm\",\r\n                \"state\": \"149\",\r\n                \"zip\": \"70000\",\r\n                \"zip4\": \"\"\r\n            }\r\n        ],\r\n        \"communicationModels\": [\r\n            {\r\n                \"commTypeRefId\": \"14\",\r\n                \"commValue\": \"(084) 111-1111\"\r\n            },\r\n            {\r\n                \"commTypeRefId\": \"17\",\r\n                \"commValue\": \"truongtestabc@mailinator.com\"\r\n            }\r\n        ],\r\n        \"ssn\": null,\r\n        \"firstName\": \"Truong\",\r\n        \"billingFirstName\": \"Truong\",\r\n        \"lastName\": \"Tran\",\r\n        \"billingLastName\": \"Tran\",\r\n        \"middleName\": \"\",\r\n        \"billingMiddleName\": \"\",\r\n        \"dob\": \"1990-11-12T17:00:00.000Z\",\r\n        \"billingDob\": \"1990-11-12T17:00:00.000Z\",\r\n        \"adminGenderRefId\": \"10\",\r\n        \"genderAtBirthRefId\": \"10\",\r\n        \"idCardTypeRefId\": \"\",\r\n        \"idNumber\": \"\",\r\n        \"preferredCommRefId\": \"14\"\r\n    },\r\n    \"byPassDeduplication\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Person/patient-core",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Person",
+            "patient-core"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Person/pcp-lookup/&first_name=Truong&state=149",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "5ebc972c-f5ba-49f6-9f80-76dca735e369",
+            "exec": [
+              "var requestConfig = {\r",
+              "    method: 'POST',\r",
+              "    url: 'https://localhost:7220/Account/login',\r",
+              "    header: 'Content-Type: application/json',\r",
+              "    body: {\r",
+              "        mode: 'raw',\r",
+              "        raw: JSON.stringify({\r",
+              "            \"username\": \"nvchau.niit@gmail.com\",\r",
+              "            \"password\": \"Altea2023!\"\r",
+              "        })\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.sendRequest(requestConfig, function (err, response) {\r",
+              "    if (err) {\r",
+              "        console.error(err);\r",
+              "    } else {\r",
+              "        if (response.code === 200) {\r",
+              "            var responseBody = response.json();\r",
+              "            var token = responseBody.accessToken;\r",
+              "            pm.collectionVariables.set('accessToken', token);\r",
+              "        } else {\r",
+              "            console.error('Failed to login. Response code:', response.code);\r",
+              "        }\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "id": "d8c39a0f-3660-437a-afd4-ad874f6bedd2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Person/pcp-lookup/&first_name=Truong&state=149",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Person",
+            "pcp-lookup",
+            "&first_name=Truong&state=149"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/total-cpt-billed",
+      "id": "1fdde3a6-cc1c-4bdf-9623-4b6f0a1baeae",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjFjZTdkNGUwLTMwOTctNGMwZS1iNjZlLWQ0MDEwYzgwMGY3ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImRhNDZhIiwiZDExMjUiLCI3MzBkNSIsIjkxYWI2IiwiZmM2YmUiLCI0ZDZjOSIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiMDg0ODkiLCJkY2MwMyIsIjFkMTc5IiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCJmMjU1NiIsIjczZTFmIiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjI2Mjk4IiwiODI2YzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCIzNDM4NyIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MTk5Nzg2NzksImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.lQzggEed6_9aS_glK93ZHuKGsK9rDzr5cQ0-tpYS6YA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"b61ab734-102a-4faf-b00c-3142848a3387\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/total-cpt-billed",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "total-cpt-billed"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/year-overview/2024",
+      "id": "5947d5cc-b24f-49a3-acc8-ad460db2a252",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjFjZTdkNGUwLTMwOTctNGMwZS1iNjZlLWQ0MDEwYzgwMGY3ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImRhNDZhIiwiZDExMjUiLCI3MzBkNSIsIjkxYWI2IiwiZmM2YmUiLCI0ZDZjOSIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiMDg0ODkiLCJkY2MwMyIsIjFkMTc5IiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCJmMjU1NiIsIjczZTFmIiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjI2Mjk4IiwiODI2YzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCIzNDM4NyIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MTk5Nzg2NzksImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.lQzggEed6_9aS_glK93ZHuKGsK9rDzr5cQ0-tpYS6YA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"b61ab734-102a-4faf-b00c-3142848a3387\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/year-overview/2024",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "year-overview",
+            "2024"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/cpt-compliance",
+      "id": "6c12bc4d-94b9-4081-b461-b686eadfc422",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"b61ab734-102a-4faf-b00c-3142848a3387\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/cpt-compliance",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "cpt-compliance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/encounters-category",
+      "id": "74c55faa-5fc4-4354-a40d-c9f8b9387843",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjFjZTdkNGUwLTMwOTctNGMwZS1iNjZlLWQ0MDEwYzgwMGY3ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImRhNDZhIiwiZDExMjUiLCI3MzBkNSIsIjkxYWI2IiwiZmM2YmUiLCI0ZDZjOSIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiMDg0ODkiLCJkY2MwMyIsIjFkMTc5IiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCJmMjU1NiIsIjczZTFmIiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjI2Mjk4IiwiODI2YzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCIzNDM4NyIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MTk5Nzg2NzksImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.lQzggEed6_9aS_glK93ZHuKGsK9rDzr5cQ0-tpYS6YA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"35c9a039-1d8e-44f5-a2b5-4a97131b5086\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/encounters-category",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "encounters-category"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/encounters-summary",
+      "id": "618265f1-2cfa-4434-a673-0e8591c0ae77",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjIyZWM2ZjQyLWY3MTUtNGU5Mi1iZGMxLTI3MmE3ZTgzY2M1ZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImRhNDZhIiwiZDExMjUiLCI5MWFiNiIsImZjNmJlIiwiNGQ2YzkiLCJjYzgzZiIsIjJjNGJkIiwiOWQ0NzMiLCJkYmYzNiIsIjA4NDg5IiwiZGNjMDMiLCIxZDE3OSIsIjFmYmExIiwiMTM2YWIiLCJjOGZhNiIsImE4YzM3IiwiZjI1NTYiLCI3M2UxZiIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsImQ3YjlkIiwiMjE3NDUiLCI0NGI1YiIsIjQxNzI1IiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCI0NmIyMCIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsImEwZjQ3IiwiNzJkMTIiLCJhYjZkMyIsImJiZjkwIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiM2U0N2YiLCJiODZjOCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjU0ODU2IiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCIyNjI5OCIsIjgyNmM3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiZjNiNjIiLCJiMTk4NCIsIjE5MDMxIiwiOGU2NDMiLCJkNDg4NiIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCIzOGM2OSIsImU4YjIxIiwiYzhhZDYiLCJlOWI3NSIsIjYwOGIzIiwiNTAyMTgiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiYmY5NjYiLCIzNDM4NyIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MTk5OTUzMDEsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.QIlH0B28A-2f8JS6pkuB4lDYXd6V-TqYny6nUfsCXQY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"35c9a039-1d8e-44f5-a2b5-4a97131b5086\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/encounters-summary",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "encounters-summary"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/census",
+      "id": "f6451608-31a1-4c94-ba11-4d02ca2af16a",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjFjZTdkNGUwLTMwOTctNGMwZS1iNjZlLWQ0MDEwYzgwMGY3ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImRhNDZhIiwiZDExMjUiLCI3MzBkNSIsIjkxYWI2IiwiZmM2YmUiLCI0ZDZjOSIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiMDg0ODkiLCJkY2MwMyIsIjFkMTc5IiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCJmMjU1NiIsIjczZTFmIiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjI2Mjk4IiwiODI2YzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCIzNDM4NyIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MTk5Nzg2NzksImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.lQzggEed6_9aS_glK93ZHuKGsK9rDzr5cQ0-tpYS6YA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"b61ab734-102a-4faf-b00c-3142848a3387\"\r\n    ],\r\n    \"excludeNotContractedPatients\": true,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 3,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/census",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "census"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Notes/prior-histories/7b8be089-253b-4c6d-a07a-db1ca978fe31?providerId=91b1fcfe-15e8-4ecc-2d2f-08dcb0520739",
+      "id": "a57c5b18-6e18-4a12-9b7a-debf2d691b3e",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRyYW4iLCJ1aWQiOiI5MWIxZmNmZS0xNWU4LTRlY2MtMmQyZi0wOGRjYjA1MjA3MzkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIwNTVlOGUxZS03YTg1LTRkNWYtYWNiNy05MDAxZWQzNDg5Y2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkxDU1ciLCJQaHlzaWNpYW4iXSwiUGVybWlzc2lvbiI6WyI1NmFkNSIsIjQwZmY0IiwiZjZmMDEiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImQxMTI1IiwiOTFhYjYiLCJmYzZiZSIsIjRkNmM5IiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCIwODQ4OSIsImRjYzAzIiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCI3M2UxZiIsIjExMWIwIiwiNjYyNDgiLCJkN2I5ZCIsIjIxNzQ1IiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjRkOTA1IiwiYTViMWEiLCJkOTRhMyIsImVjMmIwIiwiNDNjYTUiLCJhMGY0NyIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCI4NjBlYiIsIjU0ODU2IiwiZDIwYTYiLCJhZGYzOSIsIjI2Mjk4IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiZjNiNjIiLCIxOTAzMSIsIjhlNjQzIiwiZDQ4ODYiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCI3NDJhNSIsImYzZGIyIiwiZGYyZWYiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiZDRkNWMiLCI5MTQ2YyIsImJiMjc1IiwiMTViZjQiLCI4NjFkNiIsIjVhMmJkIl0sImV4cCI6MTcyMjMyNTU0OCwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.qkqJviSSKv2hsuHaSXxZybOtf_ijTWynit2n7V8gskY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Notes/prior-histories/7b8be089-253b-4c6d-a07a-db1ca978fe31?providerId=91b1fcfe-15e8-4ecc-2d2f-08dcb0520739",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Notes",
+            "prior-histories",
+            "7b8be089-253b-4c6d-a07a-db1ca978fe31"
+          ],
+          "query": [
+            {
+              "key": "providerId",
+              "value": "91b1fcfe-15e8-4ecc-2d2f-08dcb0520739"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Notes/prior-review-of-systems/efaf7c9a-b887-4dc4-9201-240d5d53f7d1?providerId=e5320e9b-b0d4-47f4-1dfb-08dc9a76eacb",
+      "id": "24f90d6e-8a70-4d66-983f-04bfbdcde3df",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGh1eXRoYW5oQG1haWxpbmF0b3IuY29tIiwidXNlcm5hbWUiOiJOZ3V5ZW4gVGhpIFRodXkgVGhhbmgiLCJ1aWQiOiJlNTMyMGU5Yi1iMGQ0LTQ3ZjQtMWRmYi0wOGRjOWE3NmVhY2IiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI5MDBjMTUyYi00OWRiLTQ2MjUtODhiYy1iYjk3OGJlYjk0YjkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQXVkaXRfQ0RDIGxvZyIsIkF1dG8gVGVzdCBBZG1pbiIsIlBoeXNpY2lhbiJdLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCIxNjQ2OSIsImRhNDZhIiwiZDExMjUiLCJkMGIwNSIsIjkxYWI2IiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCIxZmJhMSIsIjEzNmFiIiwiYzhmYTYiLCJhOGMzNyIsIjE0NDI5IiwiMTM4YTMiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxMTFiMCIsIjY2MjQ4IiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsImY2NjgxIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiMWY2NDciLCJkOTRhMyIsImVjMmIwIiwiN2Q0ZTUiLCI0M2NhNSIsImVhMjEzIiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsIjNlNDdmIiwiYjg2YzgiLCJiZjM2MyIsIjU0ODU2IiwiNWEyY2UiLCJkMjBhNiIsImFkZjM5IiwiMjYyOTgiLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsImYzYjYyIiwiMTkwMzEiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJmM2RiMiIsIjY3Y2I3IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiMzhjNjkiLCJlOGIyMSIsImM4YWQ2IiwiZTliNzUiLCI2MDhiMyIsIjUwMjE4IiwiOWIxZmQiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsImQ0ZDVjIiwiOTE0NmMiLCJkMDJiZiIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MjI0MTYyMjgsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.H4rjxk2Roh_tyDHLoPnZvL6m8UFDCK4ETw-8KI7ZdkE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Notes/prior-review-of-systems/efaf7c9a-b887-4dc4-9201-240d5d53f7d1?providerId=e5320e9b-b0d4-47f4-1dfb-08dc9a76eacb",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Notes",
+            "prior-review-of-systems",
+            "efaf7c9a-b887-4dc4-9201-240d5d53f7d1"
+          ],
+          "query": [
+            {
+              "key": "providerId",
+              "value": "e5320e9b-b0d4-47f4-1dfb-08dc9a76eacb"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientLabResult",
+      "id": "bcd62ed0-e653-432c-a80b-e42acf58e056",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjVkZjIwYjUzLWUxN2YtNDU4My04MmJiLTlhM2NlZThlM2Q4OSIsIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjVmMjI2IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjlmNTg1IiwiNTgxMjYiLCJjZWE1MSIsIjAxOTFiIiwiOTIwZjMiLCJhNTdkMCIsImNlMWQ1IiwiNjA4MzMiLCI1NTFhZSIsIjFkNzVhIiwiMDcwOTAiLCI2MTNiMiIsIjkyOGY2IiwiZDczZDIiLCI0M2JiMyIsIjkxNzY3IiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsIjBmZDQwIiwiZmM2YmUiLCJhYzYxMCIsIjI2MzY2IiwiYmVmOWIiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjg5OTU1IiwiOWQ0NzMiLCJkYmYzNiIsIjVlZTMzIiwiZWIzYjkiLCI3NmNiOSIsIjA4NDg5IiwiNzQ0YjAiLCJkY2MwMyIsIjU5MGJiIiwiYTEzZTgiLCIwOTQ0MiIsIjFkMTc5IiwiODc3NzYiLCIxZmJhMSIsIjg2NjZhIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsImM3MWZlIiwiNTJlZjAiLCI5Y2JjMSIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCIxYmRhMSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTdkNzgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCIxYWNjMiIsIjhmZDc1IiwiN2NiNDkiLCIyMTkyMSIsImQ3YjlkIiwiYjk3N2UiLCIyMTc0NSIsIjk0Y2NhIiwiMDE5ZWEiLCI0NGI1YiIsIjQyYWJkIiwiMDMyZGEiLCI4ZDkzNyIsIjNmMDc5IiwiNDE3MjUiLCI1ODdiMyIsIjE5YjliIiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCIwYjc5YyIsIjJjOWEzIiwiNDZiMjAiLCI3ZTA1ZCIsImY2NjgxIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiMWY2NDciLCIyYzI3MiIsIjYyOTQ4IiwiZDk0YTMiLCJlYzJiMCIsImU5OTI3IiwiNDNjYTUiLCIwNWQ0YiIsIjcwNjBmIiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiOGFhMjIiLCI3MmQxMiIsIjAxOTJjIiwiNzU3OGUiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCI2NDc1MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiM2FiYWIiLCIzZDQ2NiIsIjVmNmYyIiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJiOGU3YyIsImVkOTQ4IiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiNTg4MTciLCJhMTVjZiIsImNjNGY5IiwiZTQ0ZDAiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsIjY0NzZiIiwiYzkxN2QiLCIxOTAzMSIsIjI4ZDBkIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiNDdmNDQiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiOWY3NDQiLCI4ODU5NCIsIjM4YzY5IiwiMzZjYWIiLCJlOGIyMSIsImM4YWQ2IiwiNDUxM2QiLCI1Mzg5MSIsImI0NjBkIiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiMzhiYmUiLCI1MDIxOCIsIjg4OWZjIiwiZWM4ODciLCJiNjY5MyIsImViMmYzIiwiOWIxZmQiLCI0YzU5NyIsIjFkNjdiIiwiNGI0YjMiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJlNWRmYSIsIjNiM2MwIiwiYTRkN2IiLCIwNzFlMiIsIjAxOWVlIiwiNWYzOWEiLCIzNTc5MyIsIjM5NGZkIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZTA3YWEiLCJkMjMyNCIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjRhNjRjIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiZGQ3NGQiLCI2Y2ZjYyIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsImMxN2U3IiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsImZiYmRiIiwiMzQzODciLCI1YWJhMiIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjVhMTUxIiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZGZhYjgiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCI0NmYzZCIsImJiMjc1IiwiZDRkY2QiLCI1Y2RmNiIsImM4ZTRlIiwiMTViZjQiLCI2MzIyYyIsIjg2MWQ2IiwiN2E0MjciLCI1YTJiZCJdLCJleHAiOjE3NjAwODI2MzIsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.eKV14FYfAw32WuV7SU_jKuTUdG8vGHTvLlemjBZicpk",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": \"E64669E5-EA68-4FD8-A6DB-9CB8B3F1C321\",\r\n  \"patientId\": \"29fd832c-12c1-4db9-895b-1e1e4ec5c3f4\",\r\n  \"dataSource\": \"string\",\r\n  \"dataSourceId\": 11,\r\n  \"dataSourceOrgId\": \"7fd63f12-143e-4634-bb6f-2b37e00c4cc8\",\r\n  \"reportId\": \"string\",\r\n  \"reportName\": \"string\",\r\n  \"reportingLaboratory\": \"string\",\r\n  \"performingLaboratory\": \"string\",\r\n  \"reportFile\": true,\r\n  \"reportStatus\": \"string\",\r\n  \"category\": \"string\",\r\n  \"effectiveDateTime\": \"2024-08-16T07:48:07.103Z\",\r\n  \"issuedDateTime\": \"2024-08-16T07:48:07.103Z\",\r\n  \"orderingPractitionerId\": 0,\r\n  \"orderingPractitionerFristName\": \"string\",\r\n  \"orderingPractitionerLastName\": \"string\",\r\n  \"orderingPractitionerMiddleName\": \"string\",\r\n  \"orderingPractitionerNPI\": \"string\",\r\n  \"flag\": 0,\r\n  \"collectedDateTime\": \"2024-08-16T07:48:07.103Z\",\r\n  \"patientLabResultDetailRequests\": [\r\n    {\r\n      \"effectiveDateTime\": \"2024-08-16T07:48:07.103Z\",\r\n      \"issuedDateTime\": \"2024-08-16T07:48:07.103Z\",\r\n      \"panelName\": \"string\",\r\n      \"resultStatus\": \"string\",\r\n      \"observationId\": \"string\",\r\n      \"observationName\": \"string\",\r\n      \"code\": \"string\",\r\n      \"codeSystem\": \"string\",\r\n      \"codeDescription\": \"string\",\r\n      \"referenceRange\": \"string\",\r\n      \"resultValue\": \"string\",\r\n      \"resultUnit\": \"string\",\r\n      \"comment\": \"string\",\r\n      \"collectedDateTime\": \"2024-08-16T07:48:07.103Z\",\r\n      \"referenceRangeLow\": \"string\",\r\n      \"referenceRangeLowUnit\": \"string\",\r\n      \"referenceRangeHigh\": \"string\",\r\n      \"referenceRangeHighUnit\": \"string\",\r\n      \"abnormalFlag\": 0\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientLabResult",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientLabResult"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientRadiology",
+      "id": "57373eb1-bf4a-4473-8c9a-4d222b57eb9e",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImYwZjAwM2U0LWM2OTItNGJiMi04NTNmLTdlODgzMTUxZDI2MSIsIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjVmMjI2IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjlmNTg1IiwiNTgxMjYiLCJjZWE1MSIsIjAxOTFiIiwiOTIwZjMiLCJhNTdkMCIsImNlMWQ1IiwiNjA4MzMiLCI1NTFhZSIsIjFkNzVhIiwiMDcwOTAiLCI2MTNiMiIsIjkyOGY2IiwiZDczZDIiLCI0M2JiMyIsIjkxNzY3IiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsIjBmZDQwIiwiZmM2YmUiLCJhYzYxMCIsIjI2MzY2IiwiYmVmOWIiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjg5OTU1IiwiOWQ0NzMiLCJkYmYzNiIsIjVlZTMzIiwiZWIzYjkiLCI3NmNiOSIsIjA4NDg5IiwiNzQ0YjAiLCJkY2MwMyIsIjU5MGJiIiwiYTEzZTgiLCIwOTQ0MiIsIjFkMTc5IiwiODc3NzYiLCIxZmJhMSIsIjg2NjZhIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsImM3MWZlIiwiNTJlZjAiLCI5Y2JjMSIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCIxYmRhMSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTdkNzgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCIxYWNjMiIsIjhmZDc1IiwiN2NiNDkiLCIyMTkyMSIsImQ3YjlkIiwiYjk3N2UiLCIyMTc0NSIsIjk0Y2NhIiwiMDE5ZWEiLCI0NGI1YiIsIjQyYWJkIiwiMDMyZGEiLCI4ZDkzNyIsIjNmMDc5IiwiNDE3MjUiLCI1ODdiMyIsIjE5YjliIiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCIwYjc5YyIsIjJjOWEzIiwiNDZiMjAiLCI3ZTA1ZCIsImY2NjgxIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiMWY2NDciLCIyYzI3MiIsIjYyOTQ4IiwiZDk0YTMiLCJlYzJiMCIsImU5OTI3IiwiNDNjYTUiLCIwNWQ0YiIsIjcwNjBmIiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiOGFhMjIiLCI3MmQxMiIsIjAxOTJjIiwiNzU3OGUiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCI2NDc1MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiM2FiYWIiLCIzZDQ2NiIsIjVmNmYyIiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJiOGU3YyIsImVkOTQ4IiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiNTg4MTciLCJhMTVjZiIsImNjNGY5IiwiZTQ0ZDAiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsIjY0NzZiIiwiYzkxN2QiLCIxOTAzMSIsIjI4ZDBkIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiNDdmNDQiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiOWY3NDQiLCI4ODU5NCIsIjM4YzY5IiwiMzZjYWIiLCJlOGIyMSIsImM4YWQ2IiwiNDUxM2QiLCI1Mzg5MSIsImI0NjBkIiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiMzhiYmUiLCI1MDIxOCIsIjg4OWZjIiwiZWM4ODciLCJiNjY5MyIsImViMmYzIiwiOWIxZmQiLCI0YzU5NyIsIjFkNjdiIiwiNGI0YjMiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJlNWRmYSIsIjNiM2MwIiwiYTRkN2IiLCIwNzFlMiIsIjAxOWVlIiwiNWYzOWEiLCIzNTc5MyIsIjM5NGZkIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZTA3YWEiLCJkMjMyNCIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjRhNjRjIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiZGQ3NGQiLCI2Y2ZjYyIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsImMxN2U3IiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsImZiYmRiIiwiMzQzODciLCI1YWJhMiIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjVhMTUxIiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZGZhYjgiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCI0NmYzZCIsImJiMjc1IiwiZDRkY2QiLCI1Y2RmNiIsImM4ZTRlIiwiMTViZjQiLCI2MzIyYyIsIjg2MWQ2IiwiN2E0MjciLCI1YTJiZCJdLCJleHAiOjE3NjAwODAyMDQsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.yGedndjJmbVWdhOW6i4ATz7ZlNyiEE6zLi2N4FQx7rI",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": \"D20D7B75-0A89-4CF7-9525-D1FFAC78A0E6\",\r\n  \"patientId\": \"29fd832c-12c1-4db9-895b-1e1e4ec5c3f4\",\r\n  \"dataSource\": \"PointClickCare\",\r\n  \"dataSourceId\": 100001,\r\n  \"dataSourceOrgId\": \"7fd63f12-143e-4634-bb6f-2b37e00c4cc8\",\r\n  \"reportId\": \"reportId\",\r\n  \"reportName\": \"reportName\",\r\n  \"reportingLaboratory\": \"reportingLaboratory\",\r\n  \"performingLaboratory\": \"performingLaboratory\",\r\n  \"reportFile\": true,\r\n  \"reportStatus\": \"reportStatus\",\r\n  \"effectiveDateTime\": \"2024-08-16T06:51:33.336Z\",\r\n  \"issuedDateTime\": \"2024-08-16T06:51:33.336Z\",\r\n  \"orderingPractitionerId\": 0,\r\n  \"orderingPractitionerFristName\": \"FristName\",\r\n  \"orderingPractitionerLastName\": \"LastName\",\r\n  \"orderingPractitionerMiddleName\": \"MiddleName\",\r\n  \"orderingPractitionerNPI\": \"NPI\",\r\n  \"resultStatus\": \"resultStatus\",\r\n  \"procedureName\": \"procedureName\",\r\n  \"code\": \"code\",\r\n  \"codeSystem\": \"codeSystem\",\r\n  \"codeDescription\": \"codeDescription\",\r\n  \"comment\": \"comment\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientRadiology",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientRadiology"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Notes/prior-physical-exams/7b8be089-253b-4c6d-a07a-db1ca978fe31?providerId=91b1fcfe-15e8-4ecc-2d2f-08dcb0520739",
+      "id": "1acd97e4-fd31-4e6e-9b4a-b75f7b649177",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRyYW4iLCJ1aWQiOiI5MWIxZmNmZS0xNWU4LTRlY2MtMmQyZi0wOGRjYjA1MjA3MzkiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJlOTczMGFkNy01YzM0LTRkMmItYmVkNy1kZmJmZWM2OWFmYmYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkxDU1ciLCJQaHlzaWNpYW4iXSwiUGVybWlzc2lvbiI6WyI1NmFkNSIsIjQwZmY0IiwiZjZmMDEiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsImQxMTI1IiwiOTFhYjYiLCJmYzZiZSIsIjRkNmM5IiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCIwODQ4OSIsImRjYzAzIiwiMWZiYTEiLCIxMzZhYiIsImM4ZmE2IiwiYThjMzciLCI3M2UxZiIsIjExMWIwIiwiNjYyNDgiLCJkN2I5ZCIsIjIxNzQ1IiwiNDE3MjUiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjRkOTA1IiwiYTViMWEiLCJkOTRhMyIsImVjMmIwIiwiNDNjYTUiLCJhMGY0NyIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCI4NjBlYiIsIjU0ODU2IiwiZDIwYTYiLCJhZGYzOSIsIjI2Mjk4IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiZjNiNjIiLCIxOTAzMSIsIjhlNjQzIiwiZDQ4ODYiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCI3NDJhNSIsImYzZGIyIiwiZGYyZWYiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiZDRkNWMiLCI5MTQ2YyIsImJiMjc1IiwiMTViZjQiLCI4NjFkNiIsIjVhMmJkIl0sImV4cCI6MTcyMjMzNDc1MCwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.h5GRV3rDFcpUnmnv4lnzcyqroTM7PDYJP3b5h2JxGDw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Notes/prior-physical-exams/7b8be089-253b-4c6d-a07a-db1ca978fe31?providerId=91b1fcfe-15e8-4ecc-2d2f-08dcb0520739",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Notes",
+            "prior-physical-exams",
+            "7b8be089-253b-4c6d-a07a-db1ca978fe31"
+          ],
+          "query": [
+            {
+              "key": "providerId",
+              "value": "91b1fcfe-15e8-4ecc-2d2f-08dcb0520739"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Admissions/patients-by-org",
+      "id": "eea3d20d-8f11-4ad5-bc5d-45bf4cd7cf77",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHV5dGh1YW44NkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkpvaG4gSG8iLCJ1aWQiOiI0MmRmNzBlYS00NzY2LTQxYjQtZWE5OC0wOGRjNzBhNDUzZjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI5NGQ3NDlhNS1lN2FhLTQzMTgtOGEyMy1hYzYwZmQwZTY3OTciLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiUmV2ZW51ZSBDeWNsZSBNYW5hZ2VtZW50IiwiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkxDU1ciLCJDb25zdWx0IFBoeXNpY2lhbiIsIkZhY2lsaXR5IEFkbWluIiwiQXVkaXRfQ0RDIGxvZyIsIkNvbnN1bHQgQVBQIiwiUmVtb3ZlIEZyb20gT3JnIiwiQ2xlYXIgQ29uc3VsdCBMaXN0IiwiRmVhdHVyZSAwMSIsIkZlYXR1cmUgMDIiLCJGZWF0dXJlIDAzIiwiRGlyZWN0IE1lc3NhZ2luZyIsIkNRTSBQZXJtaXNzaW9uIiwiRnVsbCIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIiwiRmFjaWxpdHkgQUNUIiwiUGhhcm1hY2lzdCIsIkhlYWx0aGNhcmUgQWRtaW5pc3RyYXRvciIsIkFkdmFuY2VkIFByYWN0aWNlIFByYWN0aXRpb25lciJdLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI1ODEyNiIsImNlYTUxIiwiOTIwZjMiLCJhNTdkMCIsIjU1MWFlIiwiZDI0Y2MiLCIwNzA5MCIsIjYxM2IyIiwiNDNiYjMiLCI5MTc2NyIsIjE2NDY5IiwiM2Q5NTMiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsIjkxYWI2IiwiZmM2YmUiLCJhYzYxMCIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjJjNGJkIiwiODk5NTUiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCI3NmNiOSIsIjA4NDg5IiwiNzQ0YjAiLCJkY2MwMyIsIjFkMTc5IiwiMWZiYTEiLCI4NjY2YSIsIjEzNmFiIiwiYzhmYTYiLCJhOGMzNyIsIjE0NDI5IiwiMTM4YTMiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDRiNWIiLCI0MmFiZCIsIjQxNzI1IiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCI0NmIyMCIsImY2NjgxIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiMWY2NDciLCIyYzI3MiIsImQ5NGEzIiwiZWMyYjAiLCI3ZDRlNSIsImU5OTI3IiwiNDNjYTUiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCI3NTc4ZSIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsImNlZjRmIiwiM2U0N2YiLCJiODZjOCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjU0ODU2IiwiNWEyY2UiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsImNjNGY5IiwiODczYjciLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsImYzYjYyIiwiYjE5ODQiLCIxOTAzMSIsIjI4ZDBkIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI4ODU5NCIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImI0NjBkIiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiNTAyMTgiLCJlYzg4NyIsIjliMWZkIiwiMWQ2N2IiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJlNWRmYSIsImE0ZDdiIiwiNWYzOWEiLCIzNTc5MyIsIjEyMWZmIiwiM2M4NmUiLCI2OTNlYiIsImQxYTk2IiwiMzVhMTIiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCI3N2ZmYiIsIjRiZjk1IiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiZDAyYmYiLCI3ZmM1NSIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MjY1NjY5ODIsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.2vMzMHdIdOT6czRO-o3lopa4KdGzWkENOtd3Hixgk5o",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "// {\r\n//   \"orgid\": \"f271c94e-5378-4f03-bc69-cb1e63b85f6a\",\r\n//   \"filteroption\": \"EntireFacilityCensus\",//EntireFacilityCensusAndDischarged,Discharged,MyOrganization,EntireFacilityCensus,AllUniquePatients\r\n//   \"daysback\": 30\r\n// }\r\n{\r\n  \"orgid\": \"1C657846-B651-4706-B566-F2B4BA365C83\",\r\n  \"filteroption\": \"EntireFacilityCensus\", \r\n  \"daysback\": 0\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Admissions/patients-by-org",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Admissions",
+            "patients-by-org"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientFamilyHistory",
+      "id": "6c6658b6-afb5-43b4-aea2-4ee83f77e9bd",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"patientId\": \"7e7cd5d6-670a-4d1b-b43e-bf594ad0df39\",\r\n    \"issuerUserId\": \"0ad984b9-294a-4d96-0ff1-08dcd95e352a\",\r\n    \"narrativeText\": \"ABC\",\r\n    \"familyRelationCode\": \"Family Relation Code\",\r\n    \"familyRelationCodeDescription\": \"Relatrion Code Descr\",\r\n    \"familyRelationCodeSystem\": \"2.16.840.1.113883.5.111\",\r\n    \"familyRelationCodeSystemName\": \"HL7FamilyMember\",\r\n    \"relationGenderCode\": \"RelationCode Gender\",\r\n    \"relationBirthDate\": \"1988-11-08T00:00:00.000Z\",\r\n    \"relationDeathDate\": null,\r\n    \"dateLow\": null,\r\n    \"dateHigh\": null,\r\n    \"problemTypeCodeDescription\": \"Problem type code descr\",\r\n    \"problemTypeCodeSystem\": \"2.16.840.1.113883.6.96\",\r\n    \"problemTypeCodeSystemName\": \"SNOMED-CT\",\r\n    \"problemTypeCode\": \"Problem Type code\",\r\n    \"problemTypeTranslationCode\": \"Type Translation code\",\r\n    \"problemTypeTranslationCodeDescription\": \"\",\r\n    \"problemTypeTranslationCodeSystem\": \"2.16.840.1.113883.6.1\",\r\n    \"problemTypeTranslationCodeSystemName\": \"LOINC\",\r\n    \"problemInfoCode\": \"Problem Info code\",\r\n    \"problemInfoCodeDescription\": \"Info descr\",\r\n    \"problemInfoCodeSystem\": \"2.16.840.1.113883.6.96\",\r\n    \"problemInfoCodeSystemName\": \"SNOMED-CT\",\r\n    \"problemInfoTranslationCode\": \"Info Translation code\",\r\n    \"problemInfoTranslationCodeDescription\": \"Info translation code descr\",\r\n    \"problemInfoTranslationCodeSystem\": \"info translation code system\",\r\n    \"problemInfoTranslationCodeSystemName\": \"Info Code system name\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientFamilyHistory",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientFamilyHistory"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/CQMs/cqms/organization-cqm-by-encounter/54cf9db7-1d88-44e7-9096-5e488e542898?personId=b82bebb4-e6b1-4e4e-b893-fb2e67e0b35d&year=2024&encounterId=5edb367f-9b20-48a1-af48-9018010cd81d",
+      "id": "920ce8b6-db85-4453-89c5-1d2f75604e24",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjIxMWNmMmYxLWVkOGItNGUzYS1hM2ZhLWM0OTBiZTgwN2JhNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIkhlYWx0aGNhcmUgSW5mb3JtYXRpb24gRXhjaGFuZ2UiLCJQaHlzaWNpYW4iLCJTeXN0ZW0gSW50ZXJmYWNlIiwiQWx0ZWEgQWRtaW5pc3RyYXRvciJdLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCI5MWFiNiIsImZjNmJlIiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiMDg0ODkiLCJkY2MwMyIsImExM2U4IiwiMWQxNzkiLCIxZmJhMSIsIjEzNmFiIiwiYzhmYTYiLCJhOGMzNyIsImYyNTU2IiwiNzNlMWYiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDRiNWIiLCI0MTcyNSIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiNDZiMjAiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCJkOTRhMyIsImVjMmIwIiwiNDNjYTUiLCJhMGY0NyIsIjcyZDEyIiwiYWI2ZDMiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsIjNlNDdmIiwiYjg2YzgiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCI1NDg1NiIsImQ1NjBjIiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiMjYyOTgiLCI4MjZjNyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiZjNiNjIiLCJiMTk4NCIsIjE5MDMxIiwiOGU2NDMiLCJkNDg4NiIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCI1ZjM5YSIsIjEyMWZmIiwiM2M4NmUiLCI2OTNlYiIsImQxYTk2IiwiMzVhMTIiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCI3N2ZmYiIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiMzQzODciLCJkNGQ1YyIsIjVkOTYyIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI1YTJiZCJdLCJleHAiOjE3MjQ2NTQzMjcsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.Ra_8xJGA-i-KrVBxNzOow8FdgbyS3W89F3GK6EU1i8g",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/CQMs/cqms/organization-cqm-by-encounter/54cf9db7-1d88-44e7-9096-5e488e542898?personId=b82bebb4-e6b1-4e4e-b893-fb2e67e0b35d&year=2024&encounterId=5edb367f-9b20-48a1-af48-9018010cd81d",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "CQMs",
+            "cqms",
+            "organization-cqm-by-encounter",
+            "54cf9db7-1d88-44e7-9096-5e488e542898"
+          ],
+          "query": [
+            {
+              "key": "personId",
+              "value": "b82bebb4-e6b1-4e4e-b893-fb2e67e0b35d"
+            },
+            {
+              "key": "year",
+              "value": "2024"
+            },
+            {
+              "key": "encounterId",
+              "value": "5edb367f-9b20-48a1-af48-9018010cd81d"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/comprehensive-census",
+      "id": "a49df6b6-2c37-41b9-93f3-272334feb13b",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjI0MjAzNDU2LTJjMWMtNDUwNi05NWY3LTZmOTM5MzhlM2Q3YyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW50IERhc2hib2FyZCIsIkhlYWx0aGNhcmUgSW5mb3JtYXRpb24gRXhjaGFuZ2UiLCJQaHlzaWNpYW4iLCJTeXN0ZW0gSW50ZXJmYWNlIiwiQWx0ZWEgQWRtaW5pc3RyYXRvciJdLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCJkYTQ2YSIsImQxMTI1IiwiOTFhYjYiLCJmYzZiZSIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjJjNGJkIiwiOWQ0NzMiLCJkYmYzNiIsIjVlZTMzIiwiMDg0ODkiLCJkY2MwMyIsImExM2U4IiwiMWQxNzkiLCIxZmJhMSIsIjEzNmFiIiwiYzhmYTYiLCJhOGMzNyIsImYyNTU2IiwiNzNlMWYiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDRiNWIiLCI0MTcyNSIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiNDZiMjAiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCJkOTRhMyIsImVjMmIwIiwiNDNjYTUiLCJhMGY0NyIsIjcyZDEyIiwiYWI2ZDMiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsIjNlNDdmIiwiYjg2YzgiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCI1NDg1NiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiODg1OTQiLCIzOGM2OSIsImU4YjIxIiwiYzhhZDYiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCI1MDIxOCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiMzQzODciLCJkNGQ1YyIsIjVkOTYyIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTcyODk3NDkxNCwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.ft_so2vpqWp7t48lbr-q7UtegnO3M7GC37vnPbygEa0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"stateRefIds\": [\r\n        158,\r\n        192\r\n    ],\r\n    \"organizationIds\": [\r\n        \"35c9a039-1d8e-44f5-a2b5-4a97131b5086\",\r\n        \"a8179903-7d9c-4055-a91a-623d5356503d\",\r\n        \"f271c94e-5378-4f03-bc69-cb1e63b85f6a\"\r\n    ],\r\n    \"employedByOrgRegionIds\": [\r\n        \"3194f36a-4f83-4c7b-b572-906d66f7ccd2\",\r\n        \"a6dfc047-4d9a-435f-b2ea-f9f6fb8a3712\"\r\n    ],\r\n    \"startDate\": \"2023-09-21T04:04:05.000Z\",\r\n    \"endDate\": \"2024-09-20T04:04:05.000Z\",\r\n    \"dashboardViewType\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/comprehensive-census",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "comprehensive-census"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Organizations/organization",
+      "id": "fb3cf3d7-b5bf-4fc2-a94d-d8860a9fcfce",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjhjOWJjNjA0LTgzNjktNDgwNy04ZWU2LWM0ZWVlZjRlNzkxYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiRmFjaWxpdHkgQWRtaW4iLCJydnUgZGFzaGJvYXJkIiwiQ29tcGxpYW5jZSBEYXNoYm9hcmQiLCJIZWFsdGhjYXJlIEluZm9ybWF0aW9uIEV4Y2hhbmdlIiwiUGh5c2ljaWFuIiwiU3lzdGVtIEludGVyZmFjZSIsIkFsdGVhIEFkbWluaXN0cmF0b3IiXSwiUGVybWlzc2lvbiI6WyI1NmFkNSIsIjQwZmY0IiwiZjZmMDEiLCIxZWMwZCIsIjJkZjIxIiwiOTIwZjMiLCJhNTdkMCIsIjU1MWFlIiwiZGE0NmEiLCJkMTEyNSIsImZjNmJlIiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCIwODQ4OSIsImRjYzAzIiwiYTEzZTgiLCIxZDE3OSIsIjFmYmExIiwiMTM2YWIiLCJjOGZhNiIsImE4YzM3IiwiZjI1NTYiLCI3M2UxZiIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsImQ3YjlkIiwiMjE3NDUiLCI0NGI1YiIsIjQxNzI1IiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiNTQ4NTYiLCI1YTJjZSIsImQ1NjBjIiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCJmM2I2MiIsImIxOTg0IiwiMTkwMzEiLCI4ZTY0MyIsImQ0ODg2IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiNjhhYTQiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI4ODU5NCIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjUwMjE4IiwiMWQ2N2IiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJhNGQ3YiIsIjVmMzlhIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiZDAyYmYiLCI3ZmM1NSIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjg2MWQ2IiwiN2E0MjciLCI1YTJiZCJdLCJleHAiOjE3MzUwMTMyNTAsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.jXw7Dkjv8RRYSaW45QmcPhb6QphlGUBBCAP4IlF0Uzs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Nhiet Doi Hospital\",\r\n    \"ein\": \"643634634\",\r\n    \"code\": \"\",\r\n    \"oid\": \"7547687678\",\r\n    \"npi\": \"3252352436\",\r\n    \"dea\": \"DE4574574\",\r\n    \"parentid\": null,\r\n    \"taxonomycodes\": [\r\n        \"1080\",\r\n        \"1081\"\r\n    ],\r\n    \"typeid\": 208,\r\n    \"contracts\": [\r\n        \"54cf9db7-1d88-44e7-9096-5e488e542898\",\r\n        \"b536600c-aa63-44c3-989f-9d09a3438758\",\r\n        \"2dfcce7e-4907-4bdb-a5e6-fc2c668a5f2a\",\r\n        \"716dab56-4d3e-4e03-9791-6ffff6ae97f4\"\r\n    ],\r\n    \"poscode\": null,\r\n    \"ccn\": \"534534\",\r\n    \"timeregionrefid\": -6,\r\n    \"addressmodel\": {\r\n        \"addrTypeRefId\": 647,\r\n        \"street1\": \"Tan Hai\",\r\n        \"city\": \"HCM\",\r\n        \"zip\": \"70000\",\r\n        \"state\": \"149\"\r\n    },\r\n    \"communicationmodels\": [\r\n        {\r\n            \"commTypeRefId\": 648,\r\n            \"commValue\": \"(084) 111-1111\",\r\n            \"isPreferredComm\": false\r\n        }\r\n    ],\r\n    \"dataSource\": \"Altea\",\r\n    \"billingcorefid\": null,\r\n    \"datasourcevmid\": null,\r\n    \"dataSourceOrgUuid\": null,\r\n    \"dataSourceFacId\": null,\r\n    \"dataSourceEnabled\": false,\r\n    \"faxnotes\": false,\r\n    \"isHealthGorilla\": null,\r\n    \"updoxaccountid\": \"\",\r\n    \"rcopiaexternalidtype\": \"State\",\r\n    \"features\": [\r\n        \"4bfbb262-0ea2-4ebb-e8b2-08da8ac35e58\",\r\n        \"aec0f4f6-dc5a-4520-91fe-08db062c9619\",\r\n        \"ba1bc1f7-31ac-4878-1518-08dcf391ee66\",\r\n        \"3a9cb406-ceb5-4e7a-1519-08dcf391ee66\"\r\n    ],\r\n    \"regionids\": []\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Organizations/organization",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Organizations",
+            "organization"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Notifications/run-command",
+      "id": "fe2d4ad0-dbe0-41b2-9d08-60d63775a1d8",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjU5ZjIyZmFjLTFhNDMtNGU2YS05OWYyLTEzNGU3YTNhNTdlOCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiQ29uc3VsdCBQaHlzaWNpYW4iLCJGYWNpbGl0eSBBZG1pbiIsIlJWVSBEYXNoYm9hcmQiLCJDb21wbGlhbmNlIERhc2hib2FyZCIsIkNvbnN1bHQgQVBQIiwiSGVhbHRoY2FyZSBJbmZvcm1hdGlvbiBFeGNoYW5nZSIsIkFhcmkiLCJQaHlzaWNpYW4iLCJTeXN0ZW0gSW50ZXJmYWNlIiwiQWx0ZWEgQWRtaW5pc3RyYXRvciIsIkhlYWx0aGNhcmUgQWRtaW5pc3RyYXRvciJdLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCIwNzA5MCIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiZDBiMDUiLCJmYzZiZSIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjJjNGJkIiwiOWQ0NzMiLCJkYmYzNiIsIjVlZTMzIiwiMDg0ODkiLCJkY2MwMyIsImExM2U4IiwiMWQxNzkiLCIxZmJhMSIsIjEzNmFiIiwiYzhmYTYiLCJhOGMzNyIsIjEzOGEzIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiZDdiOWQiLCIyMTc0NSIsIjQ0YjViIiwiNDE3MjUiLCI1ODdiMyIsIjE5YjliIiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCI0NmIyMCIsImY2NjgxIiwiYmFjOGIiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsImVhMjEzIiwiYTBmNDciLCI3MmQxMiIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsImNlZjRmIiwiM2U0N2YiLCJiODZjOCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCI1YTJjZSIsImQ1NjBjIiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiODczYjciLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsImYzYjYyIiwiYjE5ODQiLCIxOTAzMSIsImM0MDE5IiwiOGU2NDMiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiNjhhYTQiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI4ODU5NCIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjUwMjE4IiwiMWQ2N2IiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJhNGQ3YiIsIjVmMzlhIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiZDAyYmYiLCI3ZmM1NSIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjYzMjJjIiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTczOTAwMzc1MiwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.sPjfxOA6bsSXgVFFxvAsZBwrRL8hzN8kSq8-UhEFTa0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "query",
+            "value": "SET IDENTITY_INSERT [dbo].[Encounters] ON;INSERT INTO [dbo].[Encounters] ([Id], [PersonId], [ProviderUserId], [OrgId], [EncounterTypeRefId], [EncounterStatusRefId], [DOS], [DocTypeRefId], [VisitTypeRefId], [ErrorStatusReasonRefId], [StatusNote], [CreatedDate], [CreatedBy], [UpdatedDate], [UpdatedBy], [EncounterNum]) VALUES ('24922228-243e-4a78-b2a8-a964c1f4f7f3','ca1e5a5f-1d13-4f56-ae2a-b57fe5a95f47', '4739BCDE-C44B-4D88-83E3-5001D4E39CF8','ad620c5f-b8a0-4b98-ba9e-5089563ab15c', '1285', '1276', '2024-11-14', '1556', '1557',NULL,NULL, '2024-12-19 15:52:43', '4739BCDE-C44B-4D88-83E3-5001D4E39CF8', '2024-12-19 16:10:17', '4739BCDE-C44B-4D88-83E3-5001D4E39CF8',(select MAX(EncounterNum)+1 from Encounters));SET IDENTITY_INSERT [dbo].[Encounters] OFF;",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"query\":\"SET IDENTITY_INSERT [dbo].[Encounters] ON;INSERT INTO [dbo].[Encounters] ([Id], [PersonId], [ProviderUserId], [OrgId], [EncounterTypeRefId], [EncounterStatusRefId], [DOS], [DocTypeRefId], [VisitTypeRefId], [ErrorStatusReasonRefId], [StatusNote], [CreatedDate], [CreatedBy], [UpdatedDate], [UpdatedBy], [EncounterNum]) VALUES ('24922228-243e-4a78-b2a8-a964c1f4f7f3','ca1e5a5f-1d13-4f56-ae2a-b57fe5a95f47', '4739BCDE-C44B-4D88-83E3-5001D4E39CF8','ad620c5f-b8a0-4b98-ba9e-5089563ab15c', '1285', '1276', '2024-11-14', '1556', '1557',NULL,NULL, '2024-12-19 15:52:43', '4739BCDE-C44B-4D88-83E3-5001D4E39CF8', '2024-12-19 16:10:17', '4739BCDE-C44B-4D88-83E3-5001D4E39CF8',(select MAX(EncounterNum)+1 from Encounters));SET IDENTITY_INSERT [dbo].[Encounters] OFF;\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Notifications/run-command",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Notifications",
+            "run-command"
+          ],
+          "query": [
+            {
+              "key": "query",
+              "value": "",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Notes/progress-notes-pdf/c4b14c6d-b4e2-4bef-8a78-c4390e9ee457",
+      "id": "1b43551c-3a99-4c90-a6ce-0833931378ad",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjNlYTU1NjZlLTI5MjUtNGIyOC04OGIyLTQ0MjAxZTdjNmU4OCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiQ29uc3VsdCBQaHlzaWNpYW4iLCJGYWNpbGl0eSBBZG1pbiIsIlJWVSBEYXNoYm9hcmQiLCJDb21wbGlhbmNlIERhc2hib2FyZCIsIkNvbnN1bHQgQVBQIiwiSGVhbHRoY2FyZSBJbmZvcm1hdGlvbiBFeGNoYW5nZSIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIiwiSGVhbHRoY2FyZSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjQwZmY0IiwiZjZmMDEiLCIxZWMwZCIsIjJkZjIxIiwiNTgxMjYiLCJjZWE1MSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsIjA3MDkwIiwiNjEzYjIiLCI0M2JiMyIsIjkxNzY3IiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiYWM2MTAiLCJiZWY5YiIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjJjNGJkIiwiODk5NTUiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCI3NmNiOSIsIjA4NDg5IiwiNzQ0YjAiLCJkY2MwMyIsIjYwNTY0IiwiYTEzZTgiLCIxZDE3OSIsIjFmYmExIiwiODY2NmEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJhOGMzNyIsIjE0NDI5IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiNmEyZWUiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDRiNWIiLCI0MmFiZCIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiNDZiMjAiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiMmMyNzIiLCI2Mjk0OCIsImQ5NGEzIiwiZWMyYjAiLCI3ZDRlNSIsImU5OTI3IiwiNDNjYTUiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCI3NTc4ZSIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsImNlZjRmIiwiM2U0N2YiLCJiODZjOCIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCJhMTVjZiIsImNjNGY5IiwiODczYjciLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsImM5MTdkIiwiMTkwMzEiLCIyOGQwZCIsImM0MDE5IiwiOGU2NDMiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiNjhhYTQiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI4ODU5NCIsIjM4YzY5IiwiZThiMjEiLCJjOGFkNiIsImI0NjBkIiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiNTAyMTgiLCJlYzg4NyIsIjliMWZkIiwiMWQ2N2IiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJlNWRmYSIsImE0ZDdiIiwiMDcxZTIiLCI1ZjM5YSIsIjM1NzkzIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiZDAyYmYiLCI3ZmM1NSIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzQwNTM4Nzc0LCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.g5jZvNlEWsW8qLEXh8Rx0sA569Qk3jQ603fHO2UriWE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Notes/progress-notes-pdf/c4b14c6d-b4e2-4bef-8a78-c4390e9ee457",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Notes",
+            "progress-notes-pdf",
+            "c4b14c6d-b4e2-4bef-8a78-c4390e9ee457"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/HealthGorilla/patient-document-reference-export-pdf?hgdocumentReferenceId=20624667fea05e4b9daddc3a&documentId=259f85b8-d2c2-42ff-a78a-0a97352841ae",
+      "id": "45deaf8b-6afa-4f90-afd1-e65d4e922e70",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6Ijg3YzU2NDU4LWYyNjAtNGQ5ZC1iYTk0LTY4MjZiMDg5YjY0MiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiQ29uc3VsdCBQaHlzaWNpYW4iLCJGYWNpbGl0eSBBZG1pbiIsIlJWVSBEYXNoYm9hcmQiLCJDb21wbGlhbmNlIERhc2hib2FyZCIsIkNvbnN1bHQgQVBQIiwiSGVhbHRoY2FyZSBJbmZvcm1hdGlvbiBFeGNoYW5nZSIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIiwiSGVhbHRoY2FyZSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsIjA3MDkwIiwiNDNiYjMiLCIxNjQ2OSIsImRhNDZhIiwiZDExMjUiLCJkMGIwNSIsImZjNmJlIiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCIwODQ4OSIsImRjYzAzIiwiYTEzZTgiLCIxZDE3OSIsIjFmYmExIiwiMTM2YWIiLCJjOGZhNiIsImE4YzM3IiwiMTM4YTMiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDRiNWIiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiZjY2ODEiLCJiYWM4YiIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiZWEyMTMiLCJhMGY0NyIsIjcyZDEyIiwiYWI2ZDMiLCIyYmFiOCIsImJiZjkwIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCI4NzNiNyIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiZjNiNjIiLCJiMTk4NCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjg4NTk0IiwiMzhjNjkiLCJlOGIyMSIsImM4YWQ2IiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiNTAyMTgiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiNWYzOWEiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiMzQzODciLCJkNGQ1YyIsIjVkOTYyIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc0MjkwMDI0NywiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.WgigrpEVGOY5pJj4rFzRpXhwvXeUBuQZBR_2vA5kM6Q",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/HealthGorilla/patient-document-reference-export-pdf?hgdocumentReferenceId=20624667fea05e4b9daddc3a&documentId=259f85b8-d2c2-42ff-a78a-0a97352841ae",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "HealthGorilla",
+            "patient-document-reference-export-pdf"
+          ],
+          "query": [
+            {
+              "key": "hgdocumentReferenceId",
+              "value": "20624667fea05e4b9daddc3a"
+            },
+            {
+              "key": "documentId",
+              "value": "259f85b8-d2c2-42ff-a78a-0a97352841ae"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/HealthGorilla/patient-document-reference-export-pdf?hgdocumentReferenceId=Altea&documentId=0f94d5b2-d3cb-463f-86e2-f91bdee55437",
+      "id": "4467e581-88bd-4796-8c59-1088576d3ab7",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6Ijg3YzU2NDU4LWYyNjAtNGQ5ZC1iYTk0LTY4MjZiMDg5YjY0MiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6WyJSZXZlbnVlIEN5Y2xlIE1hbmFnZW1lbnQiLCJBbHRlYSBBZHZhbmNlZCBBZG1pbmlzdHJhdG9yIiwiRGVtbyBSb2xlIiwiQ29uc3VsdCBQaHlzaWNpYW4iLCJGYWNpbGl0eSBBZG1pbiIsIlJWVSBEYXNoYm9hcmQiLCJDb21wbGlhbmNlIERhc2hib2FyZCIsIkNvbnN1bHQgQVBQIiwiSGVhbHRoY2FyZSBJbmZvcm1hdGlvbiBFeGNoYW5nZSIsIlBoeXNpY2lhbiIsIlN5c3RlbSBJbnRlcmZhY2UiLCJBbHRlYSBBZG1pbmlzdHJhdG9yIiwiSGVhbHRoY2FyZSBBZG1pbmlzdHJhdG9yIl0sIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjkyMGYzIiwiYTU3ZDAiLCI1NTFhZSIsIjA3MDkwIiwiNDNiYjMiLCIxNjQ2OSIsImRhNDZhIiwiZDExMjUiLCJkMGIwNSIsImZjNmJlIiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCIwODQ4OSIsImRjYzAzIiwiYTEzZTgiLCIxZDE3OSIsIjFmYmExIiwiMTM2YWIiLCJjOGZhNiIsImE4YzM3IiwiMTM4YTMiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiNDRiNWIiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiZjY2ODEiLCJiYWM4YiIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiZWEyMTMiLCJhMGY0NyIsIjcyZDEyIiwiYWI2ZDMiLCIyYmFiOCIsImJiZjkwIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCI4NzNiNyIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiZjNiNjIiLCJiMTk4NCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjg4NTk0IiwiMzhjNjkiLCJlOGIyMSIsImM4YWQ2IiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiNTAyMTgiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiNWYzOWEiLCIxMjFmZiIsIjNjODZlIiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiNzdmZmIiLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiMzQzODciLCJkNGQ1YyIsIjVkOTYyIiwiOTE0NmMiLCJkMDJiZiIsIjdmYzU1IiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc0MjkwMDI0NywiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.WgigrpEVGOY5pJj4rFzRpXhwvXeUBuQZBR_2vA5kM6Q",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/HealthGorilla/patient-document-reference-export-pdf?hgdocumentReferenceId=Altea&documentId=0f94d5b2-d3cb-463f-86e2-f91bdee55437",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "HealthGorilla",
+            "patient-document-reference-export-pdf"
+          ],
+          "query": [
+            {
+              "key": "hgdocumentReferenceId",
+              "value": "Altea"
+            },
+            {
+              "key": "documentId",
+              "value": "0f94d5b2-d3cb-463f-86e2-f91bdee55437"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Organizations/organizations-by-org-type/d8b6bfef-5ea8-4a8c-bba9-5115a9b4d11d/2954",
+      "id": "e881acef-51e2-4829-bcd1-7e5e61a218e5",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHV5dGh1YW44NkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkpvaG4gSG8iLCJ1aWQiOiI0MmRmNzBlYS00NzY2LTQxYjQtZWE5OC0wOGRjNzBhNDUzZjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJkMTQyYThiYi03MjIzLTQ4YzUtYmVmNC03MWViZDdiZGZlMWEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkxDU1ciLCJDb25zdWx0IFBoeXNpY2lhbiIsIlNjcmliZSIsIkNvbnN1bHQgQVBQIiwiQ2hhcmdlIENhcHR1cmUiLCJIZWFsdGhjYXJlIEluZm9ybWF0aW9uIEV4Y2hhbmdlIiwiV291bmQgQ2FyZSBUZW1wbGF0ZXMiLCJQc3ljaCBUZW1wbGF0ZXMiLCJEZXByZXNzaW9uIFNjcmVlbmluZyIsIlVwZGF0ZSBGYWNpbGl0eSBWTSBJRCIsIkNvbnN1bHRzIChBbGwpIiwiRHVwbGljYXRlIiwiUGh5c2ljaWFuIiwiQWx0ZWEgQWRtaW5pc3RyYXRvciIsIkhlYWx0aGNhcmUgQWRtaW5pc3RyYXRvciIsIkFkdmFuY2VkIFByYWN0aWNlIFByYWN0aXRpb25lciJdLCJQZXJtaXNzaW9uIjpbIjg5N2ViIiwiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiY2VhNTEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCIwNzA5MCIsIjYxM2IyIiwiNDNiYjMiLCI5MTc2NyIsIjE2NDY5IiwiZGE0NmEiLCJkMTEyNSIsIjczMGQ1IiwiZDBiMDUiLCJmYzZiZSIsImFjNjEwIiwiYmVmOWIiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjg5OTU1IiwiOWQ0NzMiLCJkYmYzNiIsIjVlZTMzIiwiNzZjYjkiLCIwODQ4OSIsIjc0NGIwIiwiZGNjMDMiLCI1OTBiYiIsIjYwNTY0IiwiYTEzZTgiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCI4NjY2YSIsIjEzNmFiIiwiOGQ4NDYiLCJjOGZhNiIsImE4YzM3IiwiMTQ0MjkiLCIxMzhhMyIsIjY3MmQxIiwiNTE4MzciLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsImQ3YjlkIiwiMjE3NDUiLCI5NGNjYSIsIjQ0YjViIiwiNDJhYmQiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsIjJjMjcyIiwiNjI5NDgiLCJkOTRhMyIsImVjMmIwIiwiN2Q0ZTUiLCJlOTkyNyIsIjQzY2E1IiwiZWEyMTMiLCJhMGY0NyIsIjhhYTIyIiwiNzJkMTIiLCI3NTc4ZSIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsImNlZjRmIiwiM2U0N2YiLCJiODZjOCIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCJhMTVjZiIsImNjNGY5IiwiODczYjciLCJmOWM1YiIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiNjEyNzMiLCJmM2I2MiIsImIxOTg0IiwiYzkxN2QiLCIxOTAzMSIsIjI4ZDBkIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjg4NTk0IiwiMzhjNjkiLCJlOGIyMSIsImM4YWQ2IiwiYjQ2MGQiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCI1MDIxOCIsImVjODg3IiwiOWIxZmQiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImU1ZGZhIiwiYTRkN2IiLCIwNzFlMiIsIjVmMzlhIiwiMzU3OTMiLCIzOTRmZCIsIjEyMWZmIiwiM2M4NmUiLCI2OTNlYiIsImQxYTk2IiwiMzVhMTIiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCI3N2ZmYiIsIjAyY2ZlIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiYmY5NjYiLCIzNDM4NyIsImQ0ZDVjIiwiNWQ5NjIiLCI5MTQ2YyIsImQwMmJmIiwiZWFlNTkiLCI3ZmM1NSIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzQzNjc0NDI3LCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.0XJCHMFWNp5aCukDxTp8eJQgtW9KaBY8TLezoryntZc",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Organizations/organizations-by-org-type/d8b6bfef-5ea8-4a8c-bba9-5115a9b4d11d/2954",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Organizations",
+            "organizations-by-org-type",
+            "d8b6bfef-5ea8-4a8c-bba9-5115a9b4d11d",
+            "2954"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Orders/order",
+      "id": "80b0eb52-582d-4d98-989e-64fa1e3641de",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHV5dGh1YW44NkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkpvaG4gSG8iLCJ1aWQiOiI0MmRmNzBlYS00NzY2LTQxYjQtZWE5OC0wOGRjNzBhNDUzZjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI4ODhhZDhlNC00ODM4LTQyMmUtOTM1MS1mOWE4ZDNmOTcwMWIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkxDU1ciLCJDb25zdWx0IFBoeXNpY2lhbiIsIlNjcmliZSIsIkNvbnN1bHQgQVBQIiwiQ2hhcmdlIENhcHR1cmUiLCJIZWFsdGhjYXJlIEluZm9ybWF0aW9uIEV4Y2hhbmdlIiwiV291bmQgQ2FyZSBUZW1wbGF0ZXMiLCJQc3ljaCBUZW1wbGF0ZXMiLCJEZXByZXNzaW9uIFNjcmVlbmluZyIsIlVwZGF0ZSBGYWNpbGl0eSBWTSBJRCIsIkNvbnN1bHRzIChBbGwpIiwiRHVwbGljYXRlIiwiUGh5c2ljaWFuIiwiQWx0ZWEgQWRtaW5pc3RyYXRvciIsIkhlYWx0aGNhcmUgQWRtaW5pc3RyYXRvciIsIkFkdmFuY2VkIFByYWN0aWNlIFByYWN0aXRpb25lciJdLCJQZXJtaXNzaW9uIjpbIjg5N2ViIiwiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiY2VhNTEiLCI5MjBmMyIsImE1N2QwIiwiNTUxYWUiLCIwNzA5MCIsIjYxM2IyIiwiNDNiYjMiLCI5MTc2NyIsIjE2NDY5IiwiZGE0NmEiLCJkMTEyNSIsIjczMGQ1IiwiZDBiMDUiLCJmYzZiZSIsImFjNjEwIiwiYmVmOWIiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjg5OTU1IiwiOWQ0NzMiLCJkYmYzNiIsIjVlZTMzIiwiNzZjYjkiLCIwODQ4OSIsIjc0NGIwIiwiZGNjMDMiLCI1OTBiYiIsIjYwNTY0IiwiYTEzZTgiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCI4NjY2YSIsIjEzNmFiIiwiOGQ4NDYiLCJjOGZhNiIsImE4YzM3IiwiMTQ0MjkiLCIxMzhhMyIsIjY3MmQxIiwiNTE4MzciLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsImQ3YjlkIiwiMjE3NDUiLCI5NGNjYSIsIjQ0YjViIiwiNDJhYmQiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjQ2YjIwIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsIjJjMjcyIiwiNjI5NDgiLCJkOTRhMyIsImVjMmIwIiwiN2Q0ZTUiLCJlOTkyNyIsIjQzY2E1IiwiZWEyMTMiLCJhMGY0NyIsIjhhYTIyIiwiNzJkMTIiLCI3NTc4ZSIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsImZkY2NlIiwiODY1MDAiLCI0OGJmNCIsImNlZjRmIiwiM2U0N2YiLCJiODZjOCIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCJhMTVjZiIsImNjNGY5IiwiODczYjciLCJmOWM1YiIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiNjEyNzMiLCJmM2I2MiIsImIxOTg0IiwiYzkxN2QiLCIxOTAzMSIsIjI4ZDBkIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjg4NTk0IiwiMzhjNjkiLCJlOGIyMSIsImM4YWQ2IiwiYjQ2MGQiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCI1MDIxOCIsImVjODg3IiwiOWIxZmQiLCIxZDY3YiIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImU1ZGZhIiwiYTRkN2IiLCIwNzFlMiIsIjVmMzlhIiwiMzU3OTMiLCIzOTRmZCIsIjEyMWZmIiwiM2M4NmUiLCI2OTNlYiIsImQxYTk2IiwiMzVhMTIiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCI3N2ZmYiIsIjAyY2ZlIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiYmY5NjYiLCIzNDM4NyIsImQ0ZDVjIiwiNWQ5NjIiLCI5MTQ2YyIsImQwMmJmIiwiZWFlNTkiLCI3ZmM1NSIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzQzNjc1NDk5LCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.qLXQpYTScgqxLIF0sYh0fCxsydKmmSUyiXDODKJSGOg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"patientId\": \"2e8093f9-bcb4-4710-bc9d-899fd7390d11\",\r\n  \"dateOfOrder\": \"2025-04-03T09:59:43.063Z\",\r\n  \"orderingProviderId\": \"42df70ea-4766-41b4-ea98-08dc70a453f3\",\r\n  \"orderTypeRefId\": 2961,\r\n  \"consultationOrganizationId\": \"c1d44baa-8efb-45e7-b4e7-238f6961cc92\",\r\n  \"reasonForConsultation\": \"ABC_TruongTest_Cad_FilterConsult\",\r\n  \"comments\": \"\",\r\n  \"taxonomyRefId\": 2967,\r\n  \"statusRefId\": 2959\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Orders/order",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Orders",
+            "order"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Notifications/notifications",
+      "id": "7797250f-b159-4a43-9cd7-d7638b87bc42",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiI1ZDg1OWRjYi0zYTEzLTQwMjgtYzJjYS0wOGRkNzI4N2UzZjQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI1OTZlYWZjNC1mM2Y1LTRmZjEtOTBlOC1iOTg4M2E1NWVhYjIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkxDU1ciLCJDb25zdWx0IEFQUCIsIlBoeXNpY2lhbiIsIkFsdGVhIEFkbWluaXN0cmF0b3IiXSwiUGVybWlzc2lvbiI6WyI4OTdlYiIsIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI1ODEyNiIsImNlYTUxIiwiOTIwZjMiLCJhNTdkMCIsIjU1MWFlIiwiMDcwOTAiLCI2MTNiMiIsIjQzYmIzIiwiOTE3NjciLCIxNjQ2OSIsImRhNDZhIiwiZDExMjUiLCI3MzBkNSIsImQwYjA1IiwiZmM2YmUiLCJhYzYxMCIsImJlZjliIiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI4OTk1NSIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjc2Y2I5IiwiMDg0ODkiLCI3NDRiMCIsImRjYzAzIiwiNTkwYmIiLCI2MDU2NCIsImExM2U4IiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiODY2NmEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJhOGMzNyIsIjE0NDI5IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiNmEyZWUiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCI0NGI1YiIsIjQyYWJkIiwiNDE3MjUiLCI1ODdiMyIsIjE5YjliIiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCI0NmIyMCIsImY2NjgxIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiMWY2NDciLCIyYzI3MiIsIjYyOTQ4IiwiZDk0YTMiLCJlYzJiMCIsIjdkNGU1IiwiZTk5MjciLCI0M2NhNSIsImVhMjEzIiwiYTBmNDciLCI4YWEyMiIsIjcyZDEyIiwiNzU3OGUiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCJjZWY0ZiIsIjNlNDdmIiwiYjg2YzgiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCI1YTJjZSIsImQ1NjBjIiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiYTE1Y2YiLCJjYzRmOSIsIjg3M2I3IiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiMjhkMGQiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiODg1OTQiLCIzOGM2OSIsImU4YjIxIiwiYzhhZDYiLCJiNDYwZCIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjUwMjE4IiwiZWM4ODciLCI5YjFmZCIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiZTVkZmEiLCJhNGQ3YiIsIjA3MWUyIiwiNWYzOWEiLCIzNTc5MyIsIjM5NGZkIiwiMTIxZmYiLCIzYzg2ZSIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjZlZDE0IiwiNGJmMTYiLCJkNDRjYSIsIjc3ZmZiIiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiZDAyYmYiLCJlYWU1OSIsIjdmYzU1IiwiNDZmM2QiLCJiYjI3NSIsImQ0ZGNkIiwiMTViZjQiLCI2MzIyYyIsIjg2MWQ2IiwiN2E0MjciLCI1YTJiZCJdLCJleHAiOjE3NDM2NzkyODgsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.G70lM1AaLQ0BI5bn9LYE9LIWwhXj-fN0jjUA73IZ7EA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"orgids\": [\r\n        \"d8b6bfef-5ea8-4a8c-bba9-5115a9b4d11d\"\r\n    ],\r\n    \"typeids\": [\r\n        \"51C03020-CF2F-42F0-88F7-9B0C8E05BF91\",\r\n        \"1A23E40A-7B89-4BFC-A8C3-6532695E5D87\",\r\n        \"3EC16F87-72A5-409B-B6A2-37C85EDEA050\",\r\n        \"44E350C4-757A-4F2D-8AD5-8CB7D5B903BD\",\r\n        \"BEB3BFC7-2DF3-4988-9F08-1634C51F7CE4\",\r\n        \"F19EC5EF-B11E-41D9-81BF-399F0AA1F022\",\r\n        \"5D53D926-F67F-41D8-B85B-8A9F49F159A5\"\r\n    ],\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50,\r\n    \"patientName\": \"Patient C\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Notifications/notifications",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Notifications",
+            "notifications"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/CoSigning/encounters",
+      "id": "ca914313-3f4b-48a7-9a57-31aebdbda97b",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYnVpLnRpbmhAYWx0ZWFoYy5jb20iLCJ1c2VybmFtZSI6IkJ1aSBWYW4gIFRpbmgiLCJ1aWQiOiJmZjc4ZDA3NS1iYTk5LTQzMzctMzRkYi0wOGRjMjJhMzY3OWEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI0ZWJjOWNkMS03NWI0LTQ3OTYtODE4NS02ZDRkMDBmNjM1YzkiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiQWx0ZWEgQWR2YW5jZWQgQWRtaW5pc3RyYXRvciIsIkFsdGVhIEFkbWluaXN0cmF0b3IiLCJBZHZhbmNlZCBQcmFjdGljZSBQcmFjdGl0aW9uZXIiXSwiUGVybWlzc2lvbiI6WyI1NmFkNSIsIjFlYzBkIiwiMmRmMjEiLCI1ODEyNiIsIjkyMGYzIiwiYTU3ZDAiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI0M2JiMyIsImRhNDZhIiwiZDExMjUiLCJmYzZiZSIsIjI2MzY2IiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCIwODQ4OSIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYjM3MmQiLCJhOGMzNyIsIjY3MmQxIiwiNTE4MzciLCI3ZmFiZSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsIjY2MjQ4IiwiM2I4OGQiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCI0NGI1YiIsIjNmMDc5IiwiNDE3MjUiLCI1ODdiMyIsIjUzYzNjIiwiNDE5ODEiLCJhMmQ2NyIsIjBiNzljIiwiMmM5YTMiLCI0NmIyMCIsIjdlMDVkIiwiYTViMWEiLCJiYjQ5NiIsIjYyOTQ4IiwiZWMyYjAiLCI3MmQxMiIsIjAxOTJjIiwiYWI2ZDMiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiM2U0N2YiLCJlYTI3MiIsImUzYmI0IiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCJhMTVjZiIsIjg3M2I3IiwiZjljNWIiLCIzN2Q4MiIsIjI2Mjk4IiwiODI2YzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiZDQ4ODYiLCJjYWRkOSIsIjBkMjQ3IiwiZjkwNWQiLCJiNDc2YyIsImRhMzg2IiwiNjdjYjciLCI2OGFhNCIsIjM1NjBjIiwiOWY3NDQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsIjFkNjdiIiwiNGI0YjMiLCJjYTQwNCIsIjIwMTdmIiwiYTRkN2IiLCIwMTllZSIsIjVmMzlhIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZDIzMjQiLCI2OTNlYiIsImQxYTk2IiwiMzVhMTIiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjc3ZmZiIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCIzZjcxNyIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImVhZTU5IiwiN2ZjNTUiLCI5ZWE4ZCIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjg2MWQ2IiwiN2E0MjciLCI1YTJiZCJdLCJleHAiOjE3NDQ3ODc4NzEsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.SQNDX2NPTDvRqQINYe5zrUVVk28c4WRIK0ofKV3fkyE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"pageIndex\": 0,\r\n  \"pageSize\": 0,\r\n  \"type\": 1,\r\n  \"status\": 0,\r\n  \"search\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/CoSigning/encounters",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "CoSigning",
+            "encounters"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Encounters/Encounters?dos=2025-05-13T00:00:00.000Z&patientId=d3e0a8b3-e3ef-498e-aa57-d3378c1381d4&isPhysicanGroupFiltering=true",
+      "id": "00c77807-3c78-415f-84d8-ac62c6df8849",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6ImRlYzU2YzczLTM5NTgtNGVlZS1hZjA2LWVkZGQxZDI3ZjA1NCIsIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiOTIwZjMiLCJhNTdkMCIsImNlMWQ1IiwiNjA4MzMiLCI1NTFhZSIsIjA3MDkwIiwiNDNiYjMiLCIxNjQ2OSIsImRhNDZhIiwiZDExMjUiLCJkMGIwNSIsImZjNmJlIiwiNGQ2YzkiLCI3MjY4ZCIsImNjODNmIiwiMmM0YmQiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCIwODQ4OSIsImRjYzAzIiwiYTEzZTgiLCIwOTQ0MiIsIjFkMTc5IiwiODc3NzYiLCIxZmJhMSIsIjEzNmFiIiwiOGQ4NDYiLCJjOGZhNiIsImIzNzJkIiwiYThjMzciLCIxMzhhMyIsIjY3MmQxIiwiNTE4MzciLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjIxOTIxIiwiZDdiOWQiLCIyMTc0NSIsIjk0Y2NhIiwiNDRiNWIiLCI4ZDkzNyIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsImVhMjEzIiwiYTBmNDciLCI3MmQxMiIsIjAxOTJjIiwiYWI2ZDMiLCIyYmFiOCIsImJiZjkwIiwiMTUxMDMiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCJjZWY0ZiIsIjNlNDdmIiwiYjg2YzgiLCJlYTI3MiIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjM2YjAyIiwiNWEyY2UiLCJkNTYwYyIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjU4ODE3IiwiYTE1Y2YiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsImM5MTdkIiwiMTkwMzEiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjlmNzQ0IiwiODg1OTQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsImViMmYzIiwiMWQ2N2IiLCJjYTQwNCIsImIyNTdhIiwiMjAxN2YiLCJhNGQ3YiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsImMxN2U3IiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImVhZTU5IiwiN2ZjNTUiLCI5ZWE4ZCIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjg2MWQ2IiwiN2E0MjciLCI1YTJiZCJdLCJleHAiOjE3NDcxMDY3NjgsImlzcyI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLWRldi5hbHRlYWhjLmNvbSJ9.7uRqrPr8Ht1z5vUBv9nM9qLuSUyUARTwH8tjM10h-LQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Encounters/Encounters?dos=2025-05-13T00:00:00.000Z&patientId=d3e0a8b3-e3ef-498e-aa57-d3378c1381d4&isPhysicanGroupFiltering=true",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Encounters",
+            "Encounters"
+          ],
+          "query": [
+            {
+              "key": "dos",
+              "value": "2025-05-13T00:00:00.000Z"
+            },
+            {
+              "key": "patientId",
+              "value": "d3e0a8b3-e3ef-498e-aa57-d3378c1381d4"
+            },
+            {
+              "key": "isPhysicanGroupFiltering",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/CoSigning/send-review-notfications",
+      "id": "bce6c454-9f8e-4454-8e3b-debddbf3aba0",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRyYW4iLCJ1aWQiOiJlZTIyZTZkOC0yNDJkLTQxYmItYWE3OC0wOGRkOGM3YTc5YTUiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI1YjNiOTFhYS1hMjk2LTRiOTgtOWVkMC0xYTNhMjMzZWYxZGIiLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI1ODEyNiIsIjkyMGYzIiwiYTU3ZDAiLCJjZTFkNSIsIjYwODMzIiwiNTUxYWUiLCIwNzA5MCIsIjQzYmIzIiwiZGE0NmEiLCJkMTEyNSIsImQwYjA1IiwiZmM2YmUiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCJhMTNlOCIsIjA5NDQyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsIjUyZWYwIiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiNmEyZWUiLCJmMjU1NiIsIjczZTFmIiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCI0NGI1YiIsIjhkOTM3IiwiNDE3MjUiLCI1ODdiMyIsIjE5YjliIiwiNTNjM2MiLCI0MTk4MSIsIjllYWEyIiwiYTJkNjciLCIwYjc5YyIsIjJjOWEzIiwiNDZiMjAiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsIjA1ZDRiIiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiODYwZWIiLCIxYzZlYyIsIjU0ODU2IiwiMzZiMDIiLCI1YTJjZSIsImQ1NjBjIiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiYTE1Y2YiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsImM5MTdkIiwiMTkwMzEiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiZjNkYjIiLCI2N2NiNyIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiOWY3NDQiLCI4ODU5NCIsIjM4YzY5IiwiMzZjYWIiLCJlOGIyMSIsImM4YWQ2IiwiNTM4OTEiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCIzOGJiZSIsIjUwMjE4IiwiODg5ZmMiLCJlYjJmMyIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIwMTllZSIsIjVmMzlhIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZTA3YWEiLCJkMjMyNCIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjRhNjRjIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiZGQ3NGQiLCI3N2ZmYiIsIjYyMWRhIiwiNTZjM2YiLCJjMTdlNyIsIjAyY2ZlIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiYmY5NjYiLCJkNGQ1YyIsIjNmNzE3IiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZWFlNTkiLCI3ZmM1NSIsIjllYThkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc0NzgxMTk5MywiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.QOu51qpYXCy4GF1MzVcE719ZvTDEoAGphAiZCOMivaM",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"employedByOrgId\": \"54CF9DB7-1D88-44E7-9096-5E488E542898\",\r\n  \"frequencyRefId\": 3744\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/CoSigning/distribute-notes-for-reviewing/3744",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "CoSigning",
+            "distribute-notes-for-reviewing",
+            "3744"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/encounters-category",
+      "id": "62bd39bc-e397-4074-a8e7-5ac70a8629e7",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"b802e91b-6da5-49b1-7b83-08dd9a14c340\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/encounters-category",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "encounters-category"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/rvu-year-overview",
+      "id": "61eeea3e-44ba-443c-bd5b-e5e84c945dd0",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjM5NTlhYWVkLWI1M2UtNDE3YS1hOGIzLTBkODEzODEzZGE0MSIsIlBlcm1pc3Npb24iOlsiNTZhZDUiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI0M2JiMyIsIjE2NDY5IiwiZGE0NmEiLCJkMTEyNSIsImQwYjA1IiwiZmM2YmUiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCJhMTNlOCIsIjA5NDQyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsIjEzOGEzIiwiNjcyZDEiLCI1MTgzNyIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjBiNzljIiwiMmM5YTMiLCI0NmIyMCIsImY2NjgxIiwiNGQ5MDUiLCJhNWIxYSIsImJiNDk2IiwiMWY2NDciLCJkOTRhMyIsImVjMmIwIiwiNDNjYTUiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCI1ODgxNyIsImExNWNmIiwiODczYjciLCJmOWM1YiIsIjM3ZDgyIiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiYjQ3NmMiLCJkYTM4NiIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiNjhhYTQiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI5Zjc0NCIsIjg4NTk0IiwiMzhjNjkiLCIzNmNhYiIsImU4YjIxIiwiYzhhZDYiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCIzOGJiZSIsIjUwMjE4IiwiODg5ZmMiLCJlYjJmMyIsIjFkNjdiIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIwMTllZSIsIjVmMzlhIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZTA3YWEiLCJkMjMyNCIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjRhNjRjIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiZGQ3NGQiLCI3N2ZmYiIsIjYyMWRhIiwiNTZjM2YiLCJjMTdlNyIsIjAyY2ZlIiwiNjdlNWYiLCI0ZDIwZSIsIjY2NGY5IiwiYmY5NjYiLCJmYmJkYiIsIjM0Mzg3IiwiZDRkNWMiLCI1ZDk2MiIsIjkxNDZjIiwiZDAyYmYiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCJiYjI3NSIsImQ0ZGNkIiwiMTViZjQiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzQ5MDM2NjE5LCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.-NpFqhgWk0mzWDaO-zUj3pWxgRsJrE4flrH1VOZGaNc",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"1d720e98-a2ce-4de1-d344-08dd8082ce8d\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/rvu-year-overview",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "rvu-year-overview"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/cpt-compliance",
+      "id": "d6a858cb-b9f7-45d7-a30d-02de7ad4da0e",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"1d720e98-a2ce-4de1-d344-08dd8082ce8d\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/cpt-compliance",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "cpt-compliance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/encounter-history-breakdown",
+      "id": "57dd4c81-abce-4660-991e-d6cfcba8ab05",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"1d720e98-a2ce-4de1-d344-08dd8082ce8d\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/encounter-history-breakdown",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "encounter-history-breakdown"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/rvu-breakdown",
+      "id": "1124a9e7-1c00-44d0-b59e-03dddfdc48ee",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"1d720e98-a2ce-4de1-d344-08dd8082ce8d\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/rvu-breakdown",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "rvu-breakdown"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/total-cpt-billed",
+      "id": "b1e1fd0a-7f15-4aab-885d-b02fb0e6a2f3",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"1d720e98-a2ce-4de1-d344-08dd8082ce8d\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/total-cpt-billed",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "total-cpt-billed"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Operations/encounters-summary",
+      "id": "a0dfac37-62d7-4b9b-9462-a1bb4f7682ef",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 1,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"1d720e98-a2ce-4de1-d344-08dd8082ce8d\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"Test, Truong\",\r\n    \"viewType\": 4,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-06-01T00:00:00.000Z\",\r\n    \"sort\": {\r\n        \"column\": 6,\r\n        \"state\": 2\r\n    },\r\n    \"pageIndex\": 1,\r\n    \"pageSize\": 50\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/encounters-summary",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "encounters-summary"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientProblemList/create-patient-problem-list",
+      "id": "f1bcb129-9cc7-4b45-849a-d5f3caf527a8",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiIxZDcyMGU5OC1hMmNlLTRkZTEtZDM0NC0wOGRkODA4MmNlOGQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJhN2JlYmUyZS0zZWE0LTRhNDEtYWFjMy00NDE4YWE1YjZlNWQiLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCI2MDU2NCIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiN2UwNWQiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJlZDk0OCIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsImExNWNmIiwiODczYjciLCJmOWM1YiIsIjM3ZDgyIiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjlmNzQ0IiwiODg1OTQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsImViMmYzIiwiOWIxZmQiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIwNzFlMiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImVhZTU5IiwiN2ZjNTUiLCI5ZWE4ZCIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzUzOTM2NzUzLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.LFRNScT7LDbdcBMiMWlRM5wja5CuUNNNqmy1v8wtGkw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"dataSource\": \"Altea\",\r\n        \"dataSourceOrgId\": \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\",\r\n        \"patientId\": \"ab2910fa-5752-4ffd-ad3d-477112b96d34\",\r\n        \"icd10\": \"A00.0\",\r\n        \"onsetDate\": \"2025-11-01\",\r\n        \"icd10Description\": \"Cholera due to Vibrio cholerae 01, biovar cholerae\",\r\n        \"invalidPrimary\": false\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientProblemList/create-patient-problem-list",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientProblemList",
+            "create-patient-problem-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientProblemList/problemlist/",
+      "id": "25cf6646-511a-4ffa-8725-ae0c84405f1f",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiIxZDcyMGU5OC1hMmNlLTRkZTEtZDM0NC0wOGRkODA4MmNlOGQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJiYjQ4ZGU4OC0wMzYxLTRjZjEtYjM4YS0xMGQ5ZjcwODcxZTUiLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCI2MDU2NCIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiN2UwNWQiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJlZDk0OCIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsImExNWNmIiwiODczYjciLCJmOWM1YiIsIjM3ZDgyIiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjlmNzQ0IiwiODg1OTQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsImViMmYzIiwiOWIxZmQiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIwNzFlMiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImVhZTU5IiwiN2ZjNTUiLCI5ZWE4ZCIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzUzOTM0OTIzLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.tDcgYVpF8-l6ki0MOHHAG2uX8PYqo_1kocXIvV7TcwU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"dataSource\": \"Altea\",\r\n        \"dataSourceOrgId\": \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\",\r\n        \"patientId\": \"ab2910fa-5752-4ffd-ad3d-477112b96d34\",\r\n        \"icd10\": \"A00.0\",\r\n        // \"onsetDate\": \"2025-11-01\",\r\n        \"icd10Description\": \"Cholera due to Vibrio cholerae 01, biovar cholerae\",\r\n        \"invalidPrimary\": false\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientProblemList/problemlist/",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientProblemList",
+            "problemlist",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientProblemList/problemLists-by-patient-id/ca5c3816-106f-421a-9e19-76dde2ae992d",
+      "id": "edfb906e-f2f9-4614-80ca-aa5c0cb4a8cd",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6Ijg2Y2UwYzlhLTgzODctNDE2My05ODBmLWYxZGI4MjU5OGJkNCIsIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjgwYjc0IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5ZjU4NSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCJhMTNlOCIsIjA5NDQyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCIxYmRhMSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiMWFjYzIiLCI3Y2I0OSIsIjIxOTIxIiwiZDdiOWQiLCIyMTc0NSIsIjk0Y2NhIiwiMDE5ZWEiLCI0NGI1YiIsIjhkOTM3IiwiM2YwNzkiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjBiNzljIiwiMmM5YTMiLCI0NmIyMCIsIjdlMDVkIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsIjEwMGVjIiwiZWEyMTMiLCJhMGY0NyIsIjcyZDEyIiwiMDE5MmMiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCI2NDc1MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiM2Q0NjYiLCJlYTI3MiIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjM2YjAyIiwiNWEyY2UiLCJkNTYwYyIsImI4ZTdjIiwiZWQ5NDgiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCI1ODgxNyIsImExNWNmIiwiZTQ0ZDAiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsImM5MTdkIiwiMTkwMzEiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIzOTk1NSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImI0NzZjIiwiZGEzODYiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiOWY3NDQiLCI4ODU5NCIsIjM4YzY5IiwiMzZjYWIiLCJlOGIyMSIsImM4YWQ2IiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiMzhiYmUiLCI1MDIxOCIsIjg4OWZjIiwiZWIyZjMiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiM2IzYzAiLCJhNGQ3YiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsIjVhYmEyIiwiZDRkNWMiLCI1ZDk2MiIsIjNmNzE3IiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZGZhYjgiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCJiYjI3NSIsImQ0ZGNkIiwiNWNkZjYiLCIxNWJmNCIsIjYzMjJjIiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc1NTc0NzgxMCwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.9XKXi7U7bQBf66OabDbEh3iAbNEc5F2_I-Xwu_cHxiQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dataSource\": null,\r\n    \"includePlan\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientProblemList/problemLists-by-patient-id/ca5c3816-106f-421a-9e19-76dde2ae992d",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientProblemList",
+            "problemLists-by-patient-id",
+            "ca5c3816-106f-421a-9e19-76dde2ae992d"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Organizations/organization",
+      "id": "c13dc671-e20d-4b90-8c96-57d82392dffd",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"TestAAA\",\r\n    \"ein\": null,\r\n    \"code\": \"\",\r\n    \"oid\": null,\r\n    \"npi\": null,\r\n    \"dea\": null,\r\n    \"parentid\": \"0403b100-4c1b-4c3f-851c-a8ed924000c2\",\r\n    \"taxonomycodes\": [],\r\n    \"typeid\": 210,\r\n    \"contracts\": [\r\n        \"ee7618f1-d646-40e3-ac8f-2ffc7ebbebb7\",\r\n        \"4a16db86-623b-4a57-aec6-dba67df1a7be\",\r\n        \"dd2e13f3-047f-4f93-9239-41049d95db1a\",\r\n        \"2ec192c9-cb36-4ab4-9383-76d368e41319\"\r\n    ],\r\n    \"poscode\": \"01\",\r\n    \"ccn\": null,\r\n    \"timeregionrefid\": -6,\r\n    \"addressmodel\": {\r\n        \"addrTypeRefId\": 647,\r\n        \"street1\": \"bbbb\",\r\n        \"city\": \"bbbb\",\r\n        \"zip\": \"44444\",\r\n        \"state\": \"151\"\r\n    },\r\n    \"communicationmodels\": [\r\n        {\r\n            \"commTypeRefId\": 648,\r\n            \"commValue\": \"(444) 444-4444\",\r\n            \"isPreferredComm\": false\r\n        }\r\n    ],\r\n    \"billingcorefid\": null,\r\n    \"datasourcevmid\": null,\r\n    \"dataSourceOrgUuid\": null,\r\n    \"dataSourceFacId\": null,\r\n    \"dataSourceEnabled\": false,\r\n    \"conditionDetectionEnabled\": false,\r\n    \"faxnotes\": false,\r\n    \"isHealthGorilla\": null,\r\n    \"updoxaccountid\": \"\",\r\n    \"rcopiaexternalidtype\": \"State\",\r\n    \"features\": [],\r\n    \"regionids\": [],\r\n    \"practicetypes\": []\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Organizations/organization",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Organizations",
+            "organization"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Person/dft-message/2E279097-DFE4-4722-B386-08DDE091433B",
+      "id": "fef068e8-d2bb-4c88-81f1-2fb32312f47d",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjQyOTVmN2UxLTMwYzQtNDg3NC1hZTMxLWEyZmU4YTQwYjkxNyIsIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjgwYjc0IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5ZjU4NSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCJhMTNlOCIsIjA5NDQyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCIxYmRhMSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiMWFjYzIiLCI3Y2I0OSIsIjIxOTIxIiwiZDdiOWQiLCIyMTc0NSIsIjk0Y2NhIiwiMDE5ZWEiLCI0NGI1YiIsIjhkOTM3IiwiM2YwNzkiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjBiNzljIiwiMmM5YTMiLCI0NmIyMCIsIjdlMDVkIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsIjEwMGVjIiwiZWEyMTMiLCJhMGY0NyIsIjcyZDEyIiwiMDE5MmMiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCI2NDc1MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiM2Q0NjYiLCJlYTI3MiIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjM2YjAyIiwiNWEyY2UiLCJkNTYwYyIsImI4ZTdjIiwiZWQ5NDgiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCI1ODgxNyIsImExNWNmIiwiZTQ0ZDAiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsImM5MTdkIiwiMTkwMzEiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIzOTk1NSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImI0NzZjIiwiZGEzODYiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiOWY3NDQiLCI4ODU5NCIsIjM4YzY5IiwiMzZjYWIiLCJlOGIyMSIsImM4YWQ2IiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiMzhiYmUiLCI1MDIxOCIsIjg4OWZjIiwiZWIyZjMiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiM2IzYzAiLCJhNGQ3YiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsIjVhYmEyIiwiZDRkNWMiLCI1ZDk2MiIsIjNmNzE3IiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZGZhYjgiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCJiYjI3NSIsImQ0ZGNkIiwiNWNkZjYiLCIxNWJmNCIsIjYzMjJjIiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc1NTgzOTE4NiwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.2JBwkzsSoCtOOHX_8gg7KGJTKqzXgzn0WPEwatpV38k",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Person/dft-message/2E279097-DFE4-4722-B386-08DDE091433B",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Person",
+            "dft-message",
+            "2E279097-DFE4-4722-B386-08DDE091433B"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Administration/user",
+      "id": "092f44fc-50f5-4fcd-a8cc-2d64b2a6c0f4",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"hoangvo@mailinator.com\",\r\n    \"firstname\": \"Hoang\",\r\n    \"lastname\": \"Vo\",\r\n    \"phonenumber\": \"+1(084)111-1111\",\r\n    \"roles\": [\r\n        \"83034899-6e03-45d9-a3b4-f47f1ceb4247\",\r\n        \"abd116e5-fb70-4bc8-b976-9a3fe7bb656f\",\r\n        \"3780ab12-eb4c-48ea-1a02-08db37a65ec5\",\r\n        \"216e9b25-e89b-42e7-d5eb-08dc8ef47284\",\r\n        \"1897376e-df48-4a54-092c-08dbc6ab4ab8\",\r\n        \"d5578180-ba36-45fa-a2c8-14cdf2964c65\",\r\n        \"f2074083-abdd-4158-7fcd-08dd058cfea0\"\r\n    ],\r\n    \"orgid\": \"54cf9db7-1d88-44e7-9096-5e488e542898\",\r\n    \"includeroles\": true,\r\n    \"organizations\": [\r\n        \"ad620c5f-b8a0-4b98-ba9e-5089563ab15c\",\r\n        \"5afb534f-091d-4e90-8d09-a70ab1c212f4\",\r\n        \"86eb8e64-a741-4a90-8471-e82dbc038698\",\r\n        \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\"\r\n    ],\r\n    \"includeorganizations\": true,\r\n    \"prefix\": \"20\",\r\n    \"middlename\": null,\r\n    \"suffix\": null,\r\n    \"startdate\": null,\r\n    \"enddate\": null,\r\n    \"dateofbirth\": null,\r\n    \"hasdictation\": true,\r\n    \"npinumber\": \"6346345643\",\r\n    \"medicallicensenumber\": \"6436346346\",\r\n    \"deacertificate\": \"643634646\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Administration/user",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Administration",
+            "user"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Administration/user",
+      "id": "931da187-1f2c-4ace-8caf-452f19412a44",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6Ijc2MmI3MjU4LTNjOTItNDA5OC1iMDFlLWRlMWZkYTcxNTMwMiIsIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjgwYjc0IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5ZjU4NSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCJhMTNlOCIsIjA5NDQyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiMTM2YWIiLCI4ZDg0NiIsImM4ZmE2IiwiYjM3MmQiLCJhOGMzNyIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCIxYmRhMSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTExYjAiLCI2NjI0OCIsIjNiODhkIiwiMWFjYzIiLCI3Y2I0OSIsIjIxOTIxIiwiZDdiOWQiLCIyMTc0NSIsIjk0Y2NhIiwiMDE5ZWEiLCI0NGI1YiIsIjhkOTM3IiwiM2YwNzkiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjBiNzljIiwiMmM5YTMiLCI0NmIyMCIsIjdlMDVkIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImQ5NGEzIiwiZWMyYjAiLCI0M2NhNSIsIjEwMGVjIiwiZWEyMTMiLCJhMGY0NyIsIjcyZDEyIiwiMDE5MmMiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCI2NDc1MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiM2Q0NjYiLCJlYTI3MiIsImUzYmI0IiwiYmYzNjMiLCJhYmRiMSIsIjg2MGViIiwiMWM2ZWMiLCI1NDg1NiIsIjM2YjAyIiwiNWEyY2UiLCJkNTYwYyIsImI4ZTdjIiwiZWQ5NDgiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCI1ODgxNyIsImExNWNmIiwiZTQ0ZDAiLCI4NzNiNyIsImY5YzViIiwiMzdkODIiLCIyNjI5OCIsIjgyNmM3IiwiNmM0NzciLCIwMTRjYSIsIjNiMmZlIiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiZjNiNjIiLCJiMTk4NCIsImM5MTdkIiwiMTkwMzEiLCJjNDAxOSIsIjhlNjQzIiwiZDQ4ODYiLCIyOTY0OSIsIjE4MzAxIiwiY2FkZDkiLCIzOTk1NSIsIjBkMjQ3IiwiZjkwNWQiLCI3NDJhNSIsImI0NzZjIiwiZGEzODYiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZGYyZWYiLCI4ZmY0ZSIsIjM1NjBjIiwiOWY3NDQiLCI4ODU5NCIsIjM4YzY5IiwiMzZjYWIiLCJlOGIyMSIsImM4YWQ2IiwiZTliNzUiLCI2MDhiMyIsIjNlMTFhIiwiMzhiYmUiLCI1MDIxOCIsIjg4OWZjIiwiZWIyZjMiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiM2IzYzAiLCJhNGQ3YiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsIjVhYmEyIiwiZDRkNWMiLCI1ZDk2MiIsIjNmNzE3IiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZGZhYjgiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCJiYjI3NSIsImQ0ZGNkIiwiNWNkZjYiLCIxNWJmNCIsIjYzMjJjIiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc1NjI3OTc5MiwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.eo3H2HuVt4mOesIcOrG_A4foo906a66wspD_YVXAcLY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"truongtest07@mailinator.com\",\r\n    \"firstname\": \"Truong\",\r\n    \"lastname\": \"Test 05\",\r\n    \"phonenumber\": \"+1(084)111-1111\",\r\n    \"roles\": [\r\n        \"83034899-6e03-45d9-a3b4-f47f1ceb4247\",\r\n        \"abd116e5-fb70-4bc8-b976-9a3fe7bb656f\",\r\n        \"3780ab12-eb4c-48ea-1a02-08db37a65ec5\"\r\n    ],\r\n    \"orgid\": \"54cf9db7-1d88-44e7-9096-5e488e542898\",\r\n    \"includeroles\": true,\r\n    \"organizations\": [\r\n        \"86eb8e64-a741-4a90-8471-e82dbc038698\",\r\n        \"931aa808-dba5-497d-9096-2452484cffd3\",\r\n        \"ad620c5f-b8a0-4b98-ba9e-5089563ab15c\",\r\n        \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\"\r\n    ],\r\n    \"includeorganizations\": true,\r\n    \"prefix\": null,\r\n    \"middlename\": null,\r\n    \"suffix\": null,\r\n    \"startdate\": null,\r\n    \"enddate\": null,\r\n    \"dateofbirth\": null,\r\n    \"hasdictation\": true,\r\n    \"npinumber\": null,\r\n    \"medicallicensenumber\": null,\r\n    \"deacertificate\": null\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Administration/user",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Administration",
+            "user"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Person/insurance-by-person/14cf3f82-b8f4-48e7-be0e-1a41a776eb5f",
+      "id": "4f67ada0-b586-4ed2-9df1-78f3f841e574",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHV5dGh1YW44NkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkpvaG4gSG8iLCJ1aWQiOiI0MmRmNzBlYS00NzY2LTQxYjQtZWE5OC0wOGRjNzBhNDUzZjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIzNGI2ZTcyOC1lZTYzLTQ1YjYtYWY4ZC03ZjQyNTU2MTY0YzgiLCJQZXJtaXNzaW9uIjpbIjg5N2ViIiwiNTZhZDUiLCI1ZjIyNiIsIjgwYjc0IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5ZjU4NSIsIjU4MTI2IiwiY2VhNTEiLCIwMTkxYiIsIjkyMGYzIiwiYTU3ZDAiLCJjZTFkNSIsIjYwODMzIiwiZDJhZGMiLCI1NTFhZSIsIjQ0MmM2IiwiMWQ3NWEiLCIwNzA5MCIsIjYxM2IyIiwiOTg0ZmIiLCI5MjhmNiIsImQ3M2QyIiwiNDNiYjMiLCI5YzM1MCIsIjkxNzY3IiwiMTY0NjkiLCJkYTQ2YSIsIjFkMjQ2IiwiZDExMjUiLCI3MzBkNSIsImQwYjA1IiwiMGZkNDAiLCJmYzZiZSIsImFjNjEwIiwiZTdhNzAiLCJhNTM0OCIsImY1YzY3IiwiMjYzNjYiLCJiZWY5YiIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjVkZWI1IiwiMmM0YmQiLCI4OTk1NSIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsImViM2I5IiwiMDA5OTEiLCI3NmNiOSIsIjA4NDg5IiwiNzQ0YjAiLCJkY2MwMyIsIjU5MGJiIiwiOTYxMDUiLCI2MDU2NCIsImExM2U4IiwiNTNjZmUiLCIwOTQ0MiIsIjY0NDIyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiODY2NmEiLCIxMzZhYiIsImEyMmM1IiwiOGQ4NDYiLCJjOGZhNiIsImIzNzJkIiwiYThjMzciLCIxNDQyOSIsImM3MWZlIiwiNTJlZjAiLCJlN2MyOCIsIjk3Y2NhIiwiZDExYWIiLCI5Y2JjMSIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjMzZGQ3IiwiNTE4MzciLCI3ZmFiZSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTdkNzgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCIxYWNjMiIsIjhmZDc1IiwiN2NiNDkiLCIyMTkyMSIsImQ3YjlkIiwiMjE3NDUiLCI5NGNjYSIsIjAxOWVhIiwiNDRiNWIiLCI0MmFiZCIsIjAzMmRhIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjczOWQ0IiwiNTNjM2MiLCJkMmRiNCIsIjQxOTgxIiwiNWY3YTkiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiYzY4NTkiLCI3ZTA1ZCIsImY2NjgxIiwiYmFjOGIiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImYxYmI2IiwiMmMyNzIiLCI2Mjk0OCIsImVjMmIwIiwiN2Q0ZTUiLCJlOTkyNyIsIjQzY2E1IiwiMDVkNGIiLCI3MDYwZiIsIjEwMGVjIiwiZWEyMTMiLCJhMGY0NyIsIjhhYTIyIiwiNzJkMTIiLCIwMTkyYyIsIjBiNjc5IiwiNzU3OGUiLCJhYjZkMyIsIjJiYWI4IiwiOGU0NTgiLCJiYmY5MCIsIjY0NzUwIiwiMTUxMDMiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIyMTBkMiIsImNlZjRmIiwiYWY5MjMiLCIzZTQ3ZiIsIjQzMzY5IiwiMTA2MTciLCIwNDlkYyIsImI4NmM4IiwiM2FiYWIiLCIzZDQ2NiIsIjAxYWRkIiwiZjRhMGMiLCI1ZjZmMiIsImQ5YTg4IiwiZWEyNzIiLCJjM2ExMyIsImUzYmI0IiwiYjdjZjMiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCIxYzZlYyIsIjU0ODU2IiwiMzZiMDIiLCI1YTJjZSIsIjgzOTFmIiwiZDU2MGMiLCJiOGU3YyIsImVkOTQ4IiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiYWU2MjciLCI1ODgxNyIsImExNWNmIiwiY2M0ZjkiLCJlNDRkMCIsIjg3M2I3IiwiZjljNWIiLCIzN2Q4MiIsIjJkMWY2IiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjZlMjY0IiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiYzRlZDYiLCJmM2I2MiIsImIxOTg0IiwiNjQ3NmIiLCJjOTE3ZCIsIjE5MDMxIiwiMjhkMGQiLCJjNDAxOSIsIjhlNjQzIiwiZGUwN2QiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJmYjhhOSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiNDdmNDQiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZWI5MWMiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI5Zjc0NCIsIjg4NTk0IiwiMzhjNjkiLCIzNmNhYiIsImU4YjIxIiwiYzhhZDYiLCI0NTEzZCIsIjUzODkxIiwiYjQ2MGQiLCJlOWI3NSIsImNkNjRhIiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNmY1MjciLCI1MDIxOCIsIjg4OWZjIiwiYzBlNDgiLCJlYzg4NyIsImI2NjkzIiwiZWIyZjMiLCI5YjFmZCIsIjRjNTk3IiwiMWQ2N2IiLCI0YjRiMyIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImU1ZGZhIiwiZThjYzgiLCJhNGQ3YiIsIjA3MWUyIiwiMDE5ZWUiLCI1ZjM5YSIsIjM1NzkzIiwiMzk0ZmQiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiOWNlMDIiLCJhNmY0ZCIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsIjYwNTZlIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIyNDIyMiIsIjM0Mzg3IiwiNWFiYTIiLCI5ZDU4YyIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjVhMTUxIiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZWFlNTkiLCI3ZmM1NSIsIjllYThkIiwiNDZmM2QiLCJiYjI3NSIsImQ0ZGNkIiwiNWNkZjYiLCJjOGU0ZSIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzYzNjk3MTkyLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.XS3t5wPH68WsGDsxtPfC1SE3schoVA_tpFfH6yEwoFw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Person/insurance-by-person/14cf3f82-b8f4-48e7-be0e-1a41a776eb5f",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Person",
+            "insurance-by-person",
+            "14cf3f82-b8f4-48e7-be0e-1a41a776eb5f"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Mobile/insurance-by-person/14cf3f82-b8f4-48e7-be0e-1a41a776eb5f",
+      "id": "494cf793-13b6-4144-8c31-8c3679b35df0",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiZHV5dGh1YW44NkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkpvaG4gSG8iLCJ1aWQiOiI0MmRmNzBlYS00NzY2LTQxYjQtZWE5OC0wOGRjNzBhNDUzZjMiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIzNGI2ZTcyOC1lZTYzLTQ1YjYtYWY4ZC03ZjQyNTU2MTY0YzgiLCJQZXJtaXNzaW9uIjpbIjg5N2ViIiwiNTZhZDUiLCI1ZjIyNiIsIjgwYjc0IiwiNDBmZjQiLCJmNmYwMSIsIjFlYzBkIiwiMmRmMjEiLCI5ZjU4NSIsIjU4MTI2IiwiY2VhNTEiLCIwMTkxYiIsIjkyMGYzIiwiYTU3ZDAiLCJjZTFkNSIsIjYwODMzIiwiZDJhZGMiLCI1NTFhZSIsIjQ0MmM2IiwiMWQ3NWEiLCIwNzA5MCIsIjYxM2IyIiwiOTg0ZmIiLCI5MjhmNiIsImQ3M2QyIiwiNDNiYjMiLCI5YzM1MCIsIjkxNzY3IiwiMTY0NjkiLCJkYTQ2YSIsIjFkMjQ2IiwiZDExMjUiLCI3MzBkNSIsImQwYjA1IiwiMGZkNDAiLCJmYzZiZSIsImFjNjEwIiwiZTdhNzAiLCJhNTM0OCIsImY1YzY3IiwiMjYzNjYiLCJiZWY5YiIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjVkZWI1IiwiMmM0YmQiLCI4OTk1NSIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsImViM2I5IiwiMDA5OTEiLCI3NmNiOSIsIjA4NDg5IiwiNzQ0YjAiLCJkY2MwMyIsIjU5MGJiIiwiOTYxMDUiLCI2MDU2NCIsImExM2U4IiwiNTNjZmUiLCIwOTQ0MiIsIjY0NDIyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiODY2NmEiLCIxMzZhYiIsImEyMmM1IiwiOGQ4NDYiLCJjOGZhNiIsImIzNzJkIiwiYThjMzciLCIxNDQyOSIsImM3MWZlIiwiNTJlZjAiLCJlN2MyOCIsIjk3Y2NhIiwiZDExYWIiLCI5Y2JjMSIsIjliMDMzIiwiMTM4YTMiLCI2NzJkMSIsIjMzZGQ3IiwiNTE4MzciLCI3ZmFiZSIsIjZhMmVlIiwiZjI1NTYiLCI3M2UxZiIsImZhMGE4IiwiMTdkNzgiLCIxMTFiMCIsIjY2MjQ4IiwiM2I4OGQiLCIxYWNjMiIsIjhmZDc1IiwiN2NiNDkiLCIyMTkyMSIsImQ3YjlkIiwiMjE3NDUiLCI5NGNjYSIsIjAxOWVhIiwiNDRiNWIiLCI0MmFiZCIsIjAzMmRhIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjczOWQ0IiwiNTNjM2MiLCJkMmRiNCIsIjQxOTgxIiwiNWY3YTkiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiYzY4NTkiLCI3ZTA1ZCIsImY2NjgxIiwiYmFjOGIiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsImYxYmI2IiwiMmMyNzIiLCI2Mjk0OCIsImVjMmIwIiwiN2Q0ZTUiLCJlOTkyNyIsIjQzY2E1IiwiMDVkNGIiLCI3MDYwZiIsIjEwMGVjIiwiZWEyMTMiLCJhMGY0NyIsIjhhYTIyIiwiNzJkMTIiLCIwMTkyYyIsIjBiNjc5IiwiNzU3OGUiLCJhYjZkMyIsIjJiYWI4IiwiOGU0NTgiLCJiYmY5MCIsIjY0NzUwIiwiMTUxMDMiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCIyMTBkMiIsImNlZjRmIiwiYWY5MjMiLCIzZTQ3ZiIsIjQzMzY5IiwiMTA2MTciLCIwNDlkYyIsImI4NmM4IiwiM2FiYWIiLCIzZDQ2NiIsIjAxYWRkIiwiZjRhMGMiLCI1ZjZmMiIsImQ5YTg4IiwiZWEyNzIiLCJjM2ExMyIsImUzYmI0IiwiYjdjZjMiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCIxYzZlYyIsIjU0ODU2IiwiMzZiMDIiLCI1YTJjZSIsIjgzOTFmIiwiZDU2MGMiLCJiOGU3YyIsImVkOTQ4IiwiZDIwYTYiLCJhZGYzOSIsIjNhMzY0IiwiYWU2MjciLCI1ODgxNyIsImExNWNmIiwiY2M0ZjkiLCJlNDRkMCIsIjg3M2I3IiwiZjljNWIiLCIzN2Q4MiIsIjJkMWY2IiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjZlMjY0IiwiMjNjMDIiLCIyNGIyZCIsIjYxMjczIiwiYzRlZDYiLCJmM2I2MiIsImIxOTg0IiwiNjQ3NmIiLCJjOTE3ZCIsIjE5MDMxIiwiMjhkMGQiLCJjNDAxOSIsIjhlNjQzIiwiZGUwN2QiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJmYjhhOSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiNDdmNDQiLCJmM2RiMiIsIjI0OTc0IiwiNjdjYjciLCI2ZWVmYiIsIjY4YWE0IiwiZWI5MWMiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI5Zjc0NCIsIjg4NTk0IiwiMzhjNjkiLCIzNmNhYiIsImU4YjIxIiwiYzhhZDYiLCI0NTEzZCIsIjUzODkxIiwiYjQ2MGQiLCJlOWI3NSIsImNkNjRhIiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNmY1MjciLCI1MDIxOCIsIjg4OWZjIiwiYzBlNDgiLCJlYzg4NyIsImI2NjkzIiwiZWIyZjMiLCI5YjFmZCIsIjRjNTk3IiwiMWQ2N2IiLCI0YjRiMyIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImU1ZGZhIiwiZThjYzgiLCJhNGQ3YiIsIjA3MWUyIiwiMDE5ZWUiLCI1ZjM5YSIsIjM1NzkzIiwiMzk0ZmQiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiOWNlMDIiLCJhNmY0ZCIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsIjYwNTZlIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIyNDIyMiIsIjM0Mzg3IiwiNWFiYTIiLCI5ZDU4YyIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjVhMTUxIiwiOTE0NmMiLCI1OTQ5NyIsImQwMmJmIiwiZWFlNTkiLCI3ZmM1NSIsIjllYThkIiwiNDZmM2QiLCJiYjI3NSIsImQ0ZGNkIiwiNWNkZjYiLCJjOGU0ZSIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzYzNjk3MTkyLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.XS3t5wPH68WsGDsxtPfC1SE3schoVA_tpFfH6yEwoFw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/Mobile/insurance-by-person/14cf3f82-b8f4-48e7-be0e-1a41a776eb5f",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Mobile",
+            "insurance-by-person",
+            "14cf3f82-b8f4-48e7-be0e-1a41a776eb5f"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Post Request",
+      "id": "19666d57-b2b8-42e0-a370-290ef48b04fb",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dateType\": 4,\r\n    \"referenceIds\": [],\r\n    \"identifiers\": [\r\n        \"\"\r\n    ],\r\n    \"excludeNotContractedPatients\": false,\r\n    \"viewLabel\": \"\",\r\n    \"viewType\": 2,\r\n    \"cencusType\": 0,\r\n    \"encounterType\": 0,\r\n    \"category\": -1,\r\n    \"startDate\": \"2025-08-26T00:00:00.000Z\",\r\n    \"endDate\": \"2025-09-26T00:00:00.000Z\",\r\n    \"breakdownType\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Operations/census",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Operations",
+            "census"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/HealthGorilla/patient-document-reference-export-pdf",
+      "id": "785d292f-cab7-4407-959a-953507d74788",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibnZjaGF1Lm5paXRAZ21haWwuY29tIiwidXNlcm5hbWUiOiJDaGF1IE5ndXllbiIsInVpZCI6ImNhZjI4NjNjLTQ3NDctNGM4ZS1hNTk3LTA4ZGIxNGVmZDhiOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IjU2MmI0NjQ2LWZmOWYtNDg2OC04MTNkLTU3NDBjOWFlODA1ZiIsIlBlcm1pc3Npb24iOlsiODk3ZWIiLCI1NmFkNSIsIjVmMjI2IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjlmNTg1IiwiNTgxMjYiLCJjZWE1MSIsIjAxOTFiIiwiOTIwZjMiLCJhNTdkMCIsImNlMWQ1IiwiNjA4MzMiLCI1NTFhZSIsIjFkNzVhIiwiMDcwOTAiLCI2MTNiMiIsIjkyOGY2IiwiZDczZDIiLCI0M2JiMyIsIjkxNzY3IiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsIjBmZDQwIiwiZmM2YmUiLCJhYzYxMCIsImY1YzY3IiwiMjYzNjYiLCJiZWY5YiIsIjRkNmM5IiwiNzI2OGQiLCJjYzgzZiIsIjJjNGJkIiwiODk5NTUiLCI5ZDQ3MyIsImRiZjM2IiwiNWVlMzMiLCJlYjNiOSIsIjc2Y2I5IiwiMDg0ODkiLCI3NDRiMCIsImRjYzAzIiwiNTkwYmIiLCJhMTNlOCIsIjA5NDQyIiwiMWQxNzkiLCI4Nzc3NiIsIjFmYmExIiwiODY2NmEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiNTJlZjAiLCJlN2MyOCIsIjljYmMxIiwiOWIwMzMiLCIxMzhhMyIsIjY3MmQxIiwiNTE4MzciLCI3ZmFiZSIsIjFiZGExIiwiNmEyZWUiLCJmMjU1NiIsIjczZTFmIiwiZmEwYTgiLCIxN2Q3OCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiOGZkNzUiLCI3Y2I0OSIsIjIxOTIxIiwiZDdiOWQiLCJiOTc3ZSIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiNDJhYmQiLCIwMzJkYSIsIjhkOTM3IiwiM2YwNzkiLCI0MTcyNSIsIjU4N2IzIiwiMTliOWIiLCI1M2MzYyIsIjQxOTgxIiwiOWVhYTIiLCJhMmQ2NyIsIjBiNzljIiwiMmM5YTMiLCI0NmIyMCIsIjdlMDVkIiwiZjY2ODEiLCI0ZDkwNSIsImE1YjFhIiwiYmI0OTYiLCIxZjY0NyIsIjJjMjcyIiwiNjI5NDgiLCJkOTRhMyIsImVjMmIwIiwiZTk5MjciLCI0M2NhNSIsIjA1ZDRiIiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiOGFhMjIiLCI3MmQxMiIsIjAxOTJjIiwiNzU3OGUiLCJhYjZkMyIsIjJiYWI4IiwiYmJmOTAiLCI2NDc1MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiM2FiYWIiLCIzZDQ2NiIsIjVmNmYyIiwiZDlhODgiLCJlYTI3MiIsImMzYTEzIiwiZTNiYjQiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCIxYzZlYyIsIjU0ODU2IiwiMzZiMDIiLCI1YTJjZSIsImQ1NjBjIiwiYjhlN2MiLCJlZDk0OCIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsIjU4ODE3IiwiYTE1Y2YiLCJjYzRmOSIsImU0NGQwIiwiODczYjciLCJmOWM1YiIsIjM3ZDgyIiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCI2NDc2YiIsImM5MTdkIiwiMTkwMzEiLCIyOGQwZCIsImM0MDE5IiwiOGU2NDMiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJjYWRkOSIsIjM5OTU1IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiYjQ3NmMiLCJkYTM4NiIsIjQ3ZjQ0IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjlmNzQ0IiwiODg1OTQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsIjQ1MTNkIiwiNTM4OTEiLCJiNDYwZCIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsImVjODg3IiwiYjY2OTMiLCJlYjJmMyIsIjRjNTk3IiwiMWQ2N2IiLCI0YjRiMyIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImU1ZGZhIiwiM2IzYzAiLCJhNGQ3YiIsIjA3MWUyIiwiMDE5ZWUiLCI1ZjM5YSIsIjM1NzkzIiwiMzk0ZmQiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIyNDIyMiIsIjM0Mzg3IiwiNWFiYTIiLCJkNGQ1YyIsIjVkOTYyIiwiM2Y3MTciLCI1YTE1MSIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImRmYWI4IiwiZWFlNTkiLCI3ZmM1NSIsIjllYThkIiwiNDZmM2QiLCJiYjI3NSIsImQ0ZGNkIiwiNWNkZjYiLCJjOGU0ZSIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzY1MTk1ODcwLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.nJadoTnnSDjwisSJHVl5jr94TpPamrsIYzz__63ckqU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:7220/HealthGorilla/patient-document-reference-export-pdf?hgdocumentReferenceId=Altea&documentId=310E81F1-0C23-4338-8A0D-3AB824261DE2",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "HealthGorilla",
+            "patient-document-reference-export-pdf"
+          ],
+          "query": [
+            {
+              "key": "hgdocumentReferenceId",
+              "value": "Altea"
+            },
+            {
+              "key": "documentId",
+              "value": "310E81F1-0C23-4338-8A0D-3AB824261DE2"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "52aff3e0-bcfe-4c9c-8d18-8a5c6facfc39",
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          "var requestConfig = {\r",
+          "    method: 'POST',\r",
+          "    url: 'https://localhost:7220/Account/login',\r",
+          "    header: 'Content-Type: application/json',\r",
+          "    body: {\r",
+          "        mode: 'raw',\r",
+          "        raw: JSON.stringify({\r",
+          "            \"username\": \"nvchau.niit@gmail.com\",\r",
+          "            \"password\": \"Altea2023!\"\r",
+          "        })\r",
+          "    }\r",
+          "};\r",
+          "\r",
+          "pm.sendRequest(requestConfig, function (err, response) {\r",
+          "    if (err) {\r",
+          "        console.error(err);\r",
+          "    } else {\r",
+          "        if (response.code === 200) {\r",
+          "            var responseBody = response.json();\r",
+          "            var token = responseBody.accessToken;\r",
+          "            pm.collectionVariables.set('accessToken', token);\r",
+          "        } else {\r",
+          "            console.error('Failed to login. Response code:', response.code);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "3046d0d8-819c-4dfe-a351-c2a94dabb6a1",
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "7f2607c8-3f94-417e-b933-647d8a1e612c",
+      "key": "accessToken",
+      "value": ""
+    }
+  ]
+}

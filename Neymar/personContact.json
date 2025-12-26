@@ -1,0 +1,68 @@
+[
+    {
+        "dataSource": "Altea",
+        "contactPersonModel": {
+            "addressModels": [
+                {
+                    "addrTypeRefId": "6",
+                    "street1": "123 Hoan Kiem",
+                    "street2": "12 Le Loi",
+                    "city": "HN City",
+                    "state": "192",
+                    "zip": "3000",
+                    "zip4": ""
+                }
+            ],
+            "communicationModels": [
+                {
+                    "commTypeRefId": "14",
+                    "commValue": "+1(852)111-7777"
+                },
+                {
+                    "commTypeRefId": "17",
+                    "commValue": "michael.lucianohaven@example.com"
+                }
+            ],
+            "firstname": "Michael",
+            "lastname": "Anastacioland",
+            "preferredcommrefid": "14",
+            "dob": "1994-12-15T11:03:47.162Z"
+        },
+        "personId": "{{patientId}}",
+        "relToPatientRefId": "1888",
+        "relReason": "Rel Reason"
+    },
+    {
+        "dataSource": "Altea",
+        "contactPersonModel": {
+            "addressModels": [
+                {
+                    "addrTypeRefId": "6",
+                    "street1": "122 Pho Hang Trong",
+                    "street2": "12 Hai Ba Trung",
+                    "city": "HN City",
+                    "state": "192",
+                    "zip": "3000",
+                    "zip4": ""
+                }
+            ],
+            "communicationModels": [
+                {
+                    "commTypeRefId": "14",
+                    "commValue": "+1(852)111-8878"
+                },
+                {
+                    "commTypeRefId": "17",
+                    "commValue": "david.villahaven@example.com"
+                }
+            ],
+            "firstname": "David",
+            "lastname": "Villa",
+            "preferredcommrefid": "14",
+            "dob": "1994-12-15T11:03:47.162Z"
+        },
+        "personId": "{{patientId}}",
+        "relToPatientRefId": "109",
+        "relReason": "Rel Vsa"
+    }
+]

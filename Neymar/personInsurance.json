@@ -1,0 +1,107 @@
+[
+    {
+        "dataSource": "Altea",
+        "addressModels": [
+            {
+                "addrTypeRefId": "1368",
+                "street1": "139 Pastuer",
+                "street2": "",
+                "city": "HCM City",
+                "state": "151",
+                "zip": "850823578",
+                "zip4": ""
+            }
+        ],
+        "communicationModels": [
+            {
+                "commTypeRefId": "1364",
+                "commValue": "8004415501"
+            }
+        ],
+        "relToInsuredPersonId": "{{patientId}}",
+        "relToInsuredRefId": 95,
+        "personId": "{{patientId}}",
+        "effectiveDate": "2025-08-31T17:00:00.000Z",
+        "insuranceTypeRefId": "92",  
+        "insuranceName": "AE001-AETNA BETTER HEALTH FLORIDA",
+        "priorAuthorization": "string",
+        "groupNumber": "PG01",
+        "policyNumber": "6515113313",
+        "policyHolderFirstName": "Michael",
+        "policyHolderLastName": "Lucianohaven",
+        "policyHolderMiddleName": "A.",
+        "policyHolderDOB": "1990-12-26T06:21:04.737Z",
+        "payerTypeRefId": "1903",
+        "payerName": "128FL"
+    },
+    {
+        "dataSource": "Altea",
+        "addressModels": [
+            {
+                "addrTypeRefId": "1368",
+                "street1": "12 Hoang Kiem",
+                "street2": "",
+                "city": "HN City",
+                "state": "192",
+                "zip": "799982969",
+                "zip4": ""
+            }
+        ],
+        "communicationModels": [
+            {
+                "commTypeRefId": "1364",
+                "commValue": "+1(855)300-5528"
+            }
+        ],
+        "relToInsuredPersonId": "{{patientId}}",
+        "relToInsuredRefId": 95,
+        "personId": "{{patientId}}",
+        "effectiveDate": "2025-08-31T17:00:00.000Z",
+        "insuranceTypeRefId": "93",
+        "insuranceName": "AE003-AETNA BETTER HEALTH OF KY",
+        "priorAuthorization": "AAA-12345",
+        "groupNumber": "PS01",
+        "policyNumber": "65464356345",
+        "policyHolderFirstName": "Michael",
+        "policyHolderLastName": "Lucianohaven",
+        "policyHolderMiddleName": "A.",
+        "policyHolderDOB": "1992-12-26T06:21:04.737Z",
+        "payerTypeRefId": "1903",
+        "payerName": "128KY"
+    },
+    {
+        "dataSource": "Altea",
+        "addressModels": [
+            {
+                "addrTypeRefId": "1368",
+                "street1": "299 Tran Phu",
+                "street2": "",
+                "city": "Da Nang City",
+                "state": "192",
+                "zip": "700000",
+                "zip4": ""
+            }
+        ],
+        "communicationModels": [
+            {
+                "commTypeRefId": "1364",
+                "commValue": "+1(852)111-7777"
+            }
+        ],
+        "relToInsuredPersonId": "{{patientId}}",
+        "relToInsuredRefId": 95,
+        "personId": "{{patientId}}",
+        "effectiveDate": "2025-08-31T17:00:00.000Z",
+        "insuranceTypeRefId": "94",
+        "insuranceName": "AE015-AETNA MEDICARE",
+        "priorAuthorization": "AAA-12345",
+        "groupNumber": "PT01",
+        "policyNumber": "35346364352",
+        "policyHolderFirstName": "Michael",
+        "policyHolderLastName": "Lucianohaven",
+        "policyHolderMiddleName": "A.",
+        "policyHolderDOB": "1992-12-26T06:21:04.737Z",
+        "payerTypeRefId": "1903",
+        "payerName": "60054"
+    }
+]

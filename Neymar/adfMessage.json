@@ -1,0 +1,127 @@
+{
+  "messageHeader": {
+    "sendingApplication": "Aarista",
+    "sendingFacility": "ALTHC",
+    "messageType": "ADT.A01"
+  },
+  "patientIdentification": {
+    "mrn": 150918,
+    "paitentName": {
+      "lastName": "Kutcher",
+      "firstName": "Earn",
+      "middleName": "Ozil"
+    },
+    "dateOfBirth": "19901214",  
+    "sex": "Male",
+    "address": {
+      "street1": "444 Moore Pass",
+      "street2": "Skiles Orchard",
+      "city": "Aliteco Marid",
+      "state": null,
+      "zip": "727"
+    },
+    "homePhone": "876-358-0447",
+    "email": null,
+    "businessPhone": "876-358-0447",
+    "maritalStatus": null,
+    "visitNumber": 11791,
+    "pointOfServiceLocation": "00164"
+  },
+  "patientVisit": null,
+  "guarantor": null,
+  "insurances": [
+    {
+      "priority": "Primary",
+      "carrierId": "AE001",
+      "carrierName": "AETNA BETTER HEALTH FLORIDA",
+      "carrierAddress": {
+        "street1": "26132 Nicolette Creek",
+        "street2": "",
+        "city": "North Anastacioland",
+        "state": "AZ",
+        "zip": "850823578"
+      },
+      "subscriberPolicyNumber": "6515113313",
+      "subscriberGroupNumber": "PG01",
+      "effectiveDate": "2025-08-31T00:00:00",
+      "priorAuthorizationNumber": null,
+      "subscriberName": {
+        "lastName": null,
+        "firstName": null,
+        "middleName": null
+      },
+      "subscriberRelationship": "Self",
+      "subscriberDateOfBirth": null,
+      "subscriberGender": "Unknown",
+      "subscriberAddress": {
+        "street1": "444 Moore Pass",
+        "street2": "Skiles Orchard",
+        "city": "Aliteco Marid",
+        "state": null,
+        "zip": "727"
+      }
+    },
+    {
+      "priority": "Secondary",
+      "carrierId": "AE003",
+      "carrierName": "AETNA BETTER HEALTH OF KY",
+      "carrierAddress": {
+        "street1": "87821 Wuckert Canyon",
+        "street2": "",
+        "city": "Lake Felix",
+        "state": "TX",
+        "zip": "799982969"
+      },
+      "subscriberPolicyNumber": "65464356345",
+      "subscriberGroupNumber": "PS01",
+      "effectiveDate": "2025-07-31T00:00:00",
+      "priorAuthorizationNumber": null,
+      "subscriberName": {
+        "lastName": null,
+        "firstName": null,
+        "middleName": null
+      },
+      "subscriberRelationship": "Self",
+      "subscriberDateOfBirth": null,
+      "subscriberGender": "Unknown",
+      "subscriberAddress": {
+        "street1": "444 Moore Pass",
+        "street2": "Skiles Orchard",
+        "city": "Aliteco Marid",
+        "state": null,
+        "zip": "727"
+      }
+    },
+    {
+      "priority": "Third",
+      "carrierId": "AE015",
+      "carrierName": "AETNA MEDICARE",
+      "carrierAddress": {
+        "street1": "95142 Beatty Meadow",
+        "street2": "",
+        "city": "Port Jorge",
+        "state": "TX",
+        "zip": "799981106"
+      },
+      "subscriberPolicyNumber": "35346364352",
+      "subscriberGroupNumber": "PT01",
+      "effectiveDate": "2025-06-30T00:00:00",
+      "priorAuthorizationNumber": null,
+      "subscriberName": {
+        "lastName": null,
+        "firstName": null,
+        "middleName": null
+      },
+      "subscriberRelationship": "Self",
+      "subscriberDateOfBirth": null,
+      "subscriberGender": "Unknown",
+      "subscriberAddress": {
+        "street1": "444 Moore Pass",
+        "street2": "Skiles Orchard",
+        "city": "Aliteco Marid",
+        "state": null,
+        "zip": "727"
+      }
+    }
+  ]
+}

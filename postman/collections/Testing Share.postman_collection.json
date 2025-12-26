@@ -1,0 +1,206 @@
+{
+  "info": {
+    "_postman_id": "b92f70da-0e31-4f58-bafd-923c124f5176",
+    "name": "Testing Share",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "https://localhost:7220/PatientProblemList/create-patient-problem-list",
+      "id": "12e852ae-ee80-4282-a102-b2bde3e2e8b0",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiIxZDcyMGU5OC1hMmNlLTRkZTEtZDM0NC0wOGRkODA4MmNlOGQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJhN2JlYmUyZS0zZWE0LTRhNDEtYWFjMy00NDE4YWE1YjZlNWQiLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCI2MDU2NCIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiN2UwNWQiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJlZDk0OCIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsImExNWNmIiwiODczYjciLCJmOWM1YiIsIjM3ZDgyIiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjlmNzQ0IiwiODg1OTQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsImViMmYzIiwiOWIxZmQiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIwNzFlMiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImVhZTU5IiwiN2ZjNTUiLCI5ZWE4ZCIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzUzOTM2NzUzLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.LFRNScT7LDbdcBMiMWlRM5wja5CuUNNNqmy1v8wtGkw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"dataSource\": \"Altea\",\r\n        \"dataSourceOrgId\": \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\",\r\n        \"patientId\": \"ab2910fa-5752-4ffd-ad3d-477112b96d34\",\r\n        \"icd10\": \"A00.0\",\r\n        \"onsetDate\": \"2025-11-01\",\r\n        \"icd10Description\": \"Cholera due to Vibrio cholerae 01, biovar cholerae\",\r\n        \"invalidPrimary\": false\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/PatientProblemList/create-patient-problem-list",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "PatientProblemList",
+            "create-patient-problem-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientProblemList/problemlist/",
+      "id": "cb1d35e9-7196-4441-aec6-ed7e2678eb1a",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiIxZDcyMGU5OC1hMmNlLTRkZTEtZDM0NC0wOGRkODA4MmNlOGQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxZmIyMTVmNC1iMDAxLTQ4YTItYTU5Zi1hYzJjZGNjZmUzYjQiLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCI2MDU2NCIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiN2UwNWQiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCJiYmY5MCIsIjE1MTAzIiwiZmRjY2UiLCI4NjUwMCIsIjQ4YmY0IiwiY2VmNGYiLCIzZTQ3ZiIsImI4NmM4IiwiZWEyNzIiLCJlM2JiNCIsImJmMzYzIiwiYWJkYjEiLCI4NjBlYiIsIjFjNmVjIiwiNTQ4NTYiLCIzNmIwMiIsIjVhMmNlIiwiZDU2MGMiLCJlZDk0OCIsImQyMGE2IiwiYWRmMzkiLCIzYTM2NCIsImExNWNmIiwiODczYjciLCJmOWM1YiIsIjM3ZDgyIiwiMjYyOTgiLCI4MjZjNyIsIjZjNDc3IiwiMDE0Y2EiLCIzYjJmZSIsIjIzYzAyIiwiMjRiMmQiLCI2MTI3MyIsImYzYjYyIiwiYjE5ODQiLCJjOTE3ZCIsIjE5MDMxIiwiYzQwMTkiLCI4ZTY0MyIsImQ0ODg2IiwiMjk2NDkiLCIxODMwMSIsImNhZGQ5IiwiMzk5NTUiLCIwZDI0NyIsImY5MDVkIiwiNzQyYTUiLCJiNDc2YyIsImRhMzg2IiwiZjNkYjIiLCIyNDk3NCIsIjY3Y2I3IiwiNmVlZmIiLCI2OGFhNCIsImRmMmVmIiwiOGZmNGUiLCIzNTYwYyIsIjlmNzQ0IiwiODg1OTQiLCIzOGM2OSIsIjM2Y2FiIiwiZThiMjEiLCJjOGFkNiIsImU5Yjc1IiwiNjA4YjMiLCIzZTExYSIsIjM4YmJlIiwiNTAyMTgiLCI4ODlmYyIsImViMmYzIiwiOWIxZmQiLCIxZDY3YiIsIjRiNGIzIiwiY2E0MDQiLCJiMjU3YSIsIjIwMTdmIiwiYTRkN2IiLCIwNzFlMiIsIjAxOWVlIiwiNWYzOWEiLCIwYTc0OSIsIjEyMWZmIiwiM2M4NmUiLCJlMDdhYSIsImQyMzI0IiwiNjkzZWIiLCJkMWE5NiIsIjM1YTEyIiwiNGE2NGMiLCI2ZWQxNCIsIjRiZjE2IiwiZDQ0Y2EiLCJkZDc0ZCIsIjZjZmNjIiwiNzdmZmIiLCI2MjFkYSIsIjU2YzNmIiwiYzE3ZTciLCIwMmNmZSIsIjY3ZTVmIiwiNGQyMGUiLCI2NjRmOSIsImJmOTY2IiwiZmJiZGIiLCIzNDM4NyIsImQ0ZDVjIiwiNWQ5NjIiLCIzZjcxNyIsIjkxNDZjIiwiNTk0OTciLCJkMDJiZiIsImVhZTU5IiwiN2ZjNTUiLCI5ZWE4ZCIsIjQ2ZjNkIiwiYmIyNzUiLCJkNGRjZCIsIjE1YmY0IiwiNjMyMmMiLCI4NjFkNiIsIjdhNDI3IiwiNWEyYmQiXSwiZXhwIjoxNzUzOTM3MTkzLCJpc3MiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20iLCJhdWQiOiJodHRwczovL2FwaS1kZXYuYWx0ZWFoYy5jb20ifQ.KgUxmPtO_P29WaYSt8x-d2Vq5YFbRvQ4Xerg3TizYwI",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dataSource\": \"Altea\",\r\n    \"dataSourceOrgId\": \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\",\r\n    \"patientId\": \"ab2910fa-5752-4ffd-ad3d-477112b96d34\",\r\n    \"icd10\": \"A00.0\",\r\n    \"onsetDate\": \"1800-11-10\",\r\n    \"icd10Description\": \"Cholera due to Vibrio cholerae 01, biovar cholerae\",\r\n    \"invalidPrimary\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/PatientProblemList/problemlist/6e0aedec-e286-44af-8652-f614fe19e7eb",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "PatientProblemList",
+            "problemlist",
+            "6e0aedec-e286-44af-8652-f614fe19e7eb"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/Account/login",
+      "id": "141039ea-ee5e-4d75-baa8-dd55ac965058",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"USERNAME\": \"truongtest@mailinator.com\",\r\n  \"PASSWORD\": \"Altea2023!\",\r\n  \"sourceRefId\": 0,\r\n  \"platformRefId\": 0\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/Account/login",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "Account",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "{{baseURL}}/PatientProblemList",
+      "id": "6e9c28c6-892d-4189-b675-011f5117ce46",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiIxZDcyMGU5OC1hMmNlLTRkZTEtZDM0NC0wOGRkODA4MmNlOGQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJmMDVhYTVhZi03OWM0LTQ3YjMtODBjMi03MGYwODY3MGQ3MzciLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCI2MDU2NCIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiN2UwNWQiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCI4ZTQ1OCIsImJiZjkwIiwiMTUxMDMiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCJjZWY0ZiIsIjNlNDdmIiwiYjg2YzgiLCJkOWE4OCIsImVhMjcyIiwiZTNiYjQiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCIxYzZlYyIsIjU0ODU2IiwiMzZiMDIiLCI1YTJjZSIsImQ1NjBjIiwiZWQ5NDgiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCJhMTVjZiIsIjg3M2I3IiwiZjljNWIiLCIzN2Q4MiIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiNjEyNzMiLCJmM2I2MiIsImIxOTg0IiwiYzkxN2QiLCIxOTAzMSIsImM0MDE5IiwiOGU2NDMiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJjYWRkOSIsIjM5OTU1IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiYjQ3NmMiLCJkYTM4NiIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiNjhhYTQiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI5Zjc0NCIsIjg4NTk0IiwiMzhjNjkiLCIzNmNhYiIsImU4YjIxIiwiYzhhZDYiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCIzOGJiZSIsIjUwMjE4IiwiODg5ZmMiLCJlYjJmMyIsIjliMWZkIiwiMWQ2N2IiLCI0YjRiMyIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiMDcxZTIiLCIwMTllZSIsIjVmMzlhIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZTA3YWEiLCJkMjMyNCIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjRhNjRjIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiZGQ3NGQiLCI2Y2ZjYyIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsImMxN2U3IiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsImZiYmRiIiwiMzQzODciLCJkNGQ1YyIsIjVkOTYyIiwiM2Y3MTciLCI5MTQ2YyIsIjU5NDk3IiwiZDAyYmYiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCI0NmYzZCIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjYzMjJjIiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc1Mzk0NTA0MywiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.wHrwEQP-_VSGIMWQYSVCZrOkowI6ZlzPqu92ENxidrM",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \"dataSource\": \"Altea\",\r\n        \"dataSourceOrgId\": \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\",\r\n        \"patientId\": \"ab2910fa-5752-4ffd-ad3d-477112b96d34\",\r\n        \"icd10\": \"A00.0\",\r\n        \"onsetDate\": \"2025-11-01\",\r\n        \"icd10Description\": \"Cholera due to Vibrio cholerae 01, biovar cholerae\",\r\n        \"invalidPrimary\": false\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientProblemList",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientProblemList"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://localhost:7220/PatientProblemList/problems",
+      "id": "146e48af-45a1-4350-8589-26a258cb7713",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidHJ1b25ndGVzdEBtYWlsaW5hdG9yLmNvbSIsInVzZXJuYW1lIjoiVHJ1b25nIFRlc3QiLCJ1aWQiOiIxZDcyMGU5OC1hMmNlLTRkZTEtZDM0NC0wOGRkODA4MmNlOGQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxMjRlYTQyNy1mOGU4LTQ4MTYtODkyZi0zZWQwMmFmYzFlOTUiLCJQZXJtaXNzaW9uIjpbIjU2YWQ1IiwiODBiNzQiLCI0MGZmNCIsImY2ZjAxIiwiMWVjMGQiLCIyZGYyMSIsIjU4MTI2IiwiMDE5MWIiLCI5MjBmMyIsImE1N2QwIiwiY2UxZDUiLCI2MDgzMyIsIjU1MWFlIiwiMDcwOTAiLCI5MjhmNiIsIjQzYmIzIiwiMTY0NjkiLCJkYTQ2YSIsImQxMTI1IiwiNzMwZDUiLCJkMGIwNSIsImZjNmJlIiwiMjYzNjYiLCI0ZDZjOSIsIjcyNjhkIiwiY2M4M2YiLCIyYzRiZCIsIjlkNDczIiwiZGJmMzYiLCI1ZWUzMyIsIjA4NDg5IiwiZGNjMDMiLCI2MDU2NCIsImExM2U4IiwiMDk0NDIiLCIxZDE3OSIsIjg3Nzc2IiwiMWZiYTEiLCIxMzZhYiIsIjhkODQ2IiwiYzhmYTYiLCJiMzcyZCIsImE4YzM3IiwiMTM4YTMiLCI2NzJkMSIsIjUxODM3IiwiN2ZhYmUiLCI2YTJlZSIsImYyNTU2IiwiNzNlMWYiLCJmYTBhOCIsIjExMWIwIiwiNjYyNDgiLCIzYjg4ZCIsIjFhY2MyIiwiMjE5MjEiLCJkN2I5ZCIsIjIxNzQ1IiwiOTRjY2EiLCIwMTllYSIsIjQ0YjViIiwiOGQ5MzciLCIzZjA3OSIsIjQxNzI1IiwiNTg3YjMiLCIxOWI5YiIsIjUzYzNjIiwiNDE5ODEiLCI5ZWFhMiIsImEyZDY3IiwiMGI3OWMiLCIyYzlhMyIsIjQ2YjIwIiwiN2UwNWQiLCJmNjY4MSIsIjRkOTA1IiwiYTViMWEiLCJiYjQ5NiIsIjFmNjQ3IiwiZDk0YTMiLCJlYzJiMCIsIjQzY2E1IiwiMTAwZWMiLCJlYTIxMyIsImEwZjQ3IiwiNzJkMTIiLCIwMTkyYyIsImFiNmQzIiwiMmJhYjgiLCI4ZTQ1OCIsImJiZjkwIiwiMTUxMDMiLCJmZGNjZSIsIjg2NTAwIiwiNDhiZjQiLCJjZWY0ZiIsIjNlNDdmIiwiYjg2YzgiLCJkOWE4OCIsImVhMjcyIiwiZTNiYjQiLCJiZjM2MyIsImFiZGIxIiwiODYwZWIiLCIxYzZlYyIsIjU0ODU2IiwiMzZiMDIiLCI1YTJjZSIsImQ1NjBjIiwiZWQ5NDgiLCJkMjBhNiIsImFkZjM5IiwiM2EzNjQiLCJhMTVjZiIsIjg3M2I3IiwiZjljNWIiLCIzN2Q4MiIsIjI2Mjk4IiwiODI2YzciLCI2YzQ3NyIsIjAxNGNhIiwiM2IyZmUiLCIyM2MwMiIsIjI0YjJkIiwiNjEyNzMiLCJmM2I2MiIsImIxOTg0IiwiYzkxN2QiLCIxOTAzMSIsImM0MDE5IiwiOGU2NDMiLCJkNDg4NiIsIjI5NjQ5IiwiMTgzMDEiLCJjYWRkOSIsIjM5OTU1IiwiMGQyNDciLCJmOTA1ZCIsIjc0MmE1IiwiYjQ3NmMiLCJkYTM4NiIsImYzZGIyIiwiMjQ5NzQiLCI2N2NiNyIsIjZlZWZiIiwiNjhhYTQiLCJkZjJlZiIsIjhmZjRlIiwiMzU2MGMiLCI5Zjc0NCIsIjg4NTk0IiwiMzhjNjkiLCIzNmNhYiIsImU4YjIxIiwiYzhhZDYiLCJlOWI3NSIsIjYwOGIzIiwiM2UxMWEiLCIzOGJiZSIsIjUwMjE4IiwiODg5ZmMiLCJlYjJmMyIsIjliMWZkIiwiMWQ2N2IiLCI0YjRiMyIsImNhNDA0IiwiYjI1N2EiLCIyMDE3ZiIsImE0ZDdiIiwiMDcxZTIiLCIwMTllZSIsIjVmMzlhIiwiMGE3NDkiLCIxMjFmZiIsIjNjODZlIiwiZTA3YWEiLCJkMjMyNCIsIjY5M2ViIiwiZDFhOTYiLCIzNWExMiIsIjRhNjRjIiwiNmVkMTQiLCI0YmYxNiIsImQ0NGNhIiwiZGQ3NGQiLCI2Y2ZjYyIsIjc3ZmZiIiwiNjIxZGEiLCI1NmMzZiIsImMxN2U3IiwiMDJjZmUiLCI2N2U1ZiIsIjRkMjBlIiwiNjY0ZjkiLCJiZjk2NiIsImZiYmRiIiwiMzQzODciLCJkNGQ1YyIsIjVkOTYyIiwiM2Y3MTciLCI5MTQ2YyIsIjU5NDk3IiwiZDAyYmYiLCJlYWU1OSIsIjdmYzU1IiwiOWVhOGQiLCI0NmYzZCIsImJiMjc1IiwiZDRkY2QiLCIxNWJmNCIsIjYzMjJjIiwiODYxZDYiLCI3YTQyNyIsIjVhMmJkIl0sImV4cCI6MTc1Mzk0NjMxMiwiaXNzIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIiwiYXVkIjoiaHR0cHM6Ly9hcGktZGV2LmFsdGVhaGMuY29tIn0.PWvdnHolEhiV6ga-Ebd_1sWKRcbr5t1wjSFzlPpG1UI",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    {\r\n        \"id\": \"A108F8C9-CBE0-48E0-A043-69A2D183D940\",\r\n        \"dataSource\": \"Altea\",\r\n        \"dataSourceId\": 638773182426267066,\r\n        \"dataSourceOrgId\": \"5b5ddc3a-f0f9-4fe3-98f8-313a07289022\",\r\n        \"patientId\": \"ab2910fa-5752-4ffd-ad3d-477112b96d34\",\r\n        \"icd10\": \"A00.0\",\r\n        \"onsetDate\": \"2025-10-01\",\r\n        \"icd10Description\": \"Cholera due to Vibrio cholerae 01, biovar cholerae\",\r\n        \"invalidPrimary\": false\r\n    }\r\n]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:7220/PatientProblemList/problems",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "7220",
+          "path": [
+            "PatientProblemList",
+            "problems"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "id": "7577bf93-92c4-41e5-b391-1b4cea1c171f",
+      "key": "baseURL",
+      "value": "https://localhost:7220",
+      "type": "default"
+    }
+  ]
+}
