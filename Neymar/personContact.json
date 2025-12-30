@@ -63,6 +63,7 @@
         },
         "personId": "{{patientId}}",
         "relToPatientRefId": "109",
-        "relReason": "Rel Vsa"
+        "relReason": "Rel Vsa",
+        "isGuarantor": true
     }
 ]
